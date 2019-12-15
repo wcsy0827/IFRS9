@@ -77,6 +77,15 @@
                                 '</div>' +
                             '</fieldset>'
                         );
+
+                        //Joe:CheckBox 點選連動
+                        $('#D6RiskReviewSub').change(function () {
+                            $('#D6RiskReviewSub').prop('checked') == false ? $('#D6RiskReviewHandleSub').prop('checked', false) : null;
+                        });
+                        $('#D6RiskReviewHandleSub').change(function () {
+                            $('#D6RiskReviewHandleSub').prop('checked') == true ? $('#D6RiskReviewSub').prop('checked', true) : null;
+                        });
+
                     }
                     else {
                         customerUtility.alert(result.DESCRIPTION,'e');

@@ -71,6 +71,10 @@
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Interop.VBIDE">
+      <HintPath>..\..\..\..\Desktop\_開發_功能_總整理_ver0\_binFile\Interop.VBIDE.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -132,12 +136,11 @@
       <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="renci.sshnet, Version=2014.4.6.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\renci.sshnet.dll</HintPath>
+    <Reference Include="Renci.SshNet">
+      <HintPath>..\..\..\..\Desktop\_開發_功能_總整理_ver0\_binFile\Renci.SshNet.dll</HintPath>
     </Reference>
     <Reference Include="SendMail">
-      <HintPath>C:\Users\mark\Desktop\新增資料夾\SendMail\SendMail\bin\Debug\SendMail.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\_開發_功能_總整理_ver0\_binFile\SendMail.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -641,9 +644,12 @@
     <Compile Include="Report\Data\Impairment02.cs" />
     <Compile Include="Report\Data\ReportData.cs" />
     <Compile Include="Report\Data\Impairment01.cs" />
+    <Compile Include="Report\Data\Summary.cs" />
     <Compile Include="Report\Data\WarningIND.cs" />
     <Compile Include="Report\Data\WatchIND.cs" />
     <Compile Include="Report\Interface\IReportData.cs" />
+    <Compile Include="Report\Rdlc\Summary.cs" />
+    <Compile Include="Report\Rdlc\Summary.Designer.cs" />
     <Compile Include="Report\Rdlc\TestRptDataSet.cs">
       <DependentUpon>TestRptDataSet.xsd</DependentUpon>
     </Compile>
@@ -662,6 +668,7 @@
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Utility\Authority.cs" />
     <Compile Include="Utility\CacheList.cs" />
+    <Compile Include="Utility\GetQueryValue.cs" />
     <Compile Include="Utility\Report.cs" />
     <Compile Include="Utility\FactoryRegistry.cs" />
     <Compile Include="Utility\Utility.cs" />
@@ -890,6 +897,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="Report\Rdlc\Summary.xsc" />
+    <None Include="Report\Rdlc\Summary.xsd" />
+    <Content Include="Report\Rdlc\Summary.xss" />
     <None Include="Report\Rdlc\TestRptDataSet.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -1101,6 +1111,7 @@
     <Content Include="Views\D6\ReEL.cshtml" />
     <Content Include="Views\C0\C10.cshtml" />
     <Content Include="Views\C0\C10Detail.cshtml" />
+    <Content Include="Views\D6\D6RiskReview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1118,17 +1129,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="VBIDE">
-      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
-      <VersionMajor>5</VersionMajor>
-      <VersionMinor>3</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -1207,6 +1207,9 @@
     <Content Include="Report\Rdlc\D02_5.rdlc">
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Report\Rdlc\Summary.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

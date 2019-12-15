@@ -1,0 +1,449 @@
+﻿@{
+    ViewBag.Menu = "D6Main";
+    ViewBag.SubMenu = "D6RiskReviewSub";
+    ViewBag.Title = "風控覆核專區";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container" id="main">
+    <div class="row main_hand">
+        <div class="col-md-12 main_hand_div" style="">
+            <form id="myForm">
+                <table>
+                    <tr>
+                        <td style="padding-top:5px;" class="form-group">
+                            <label>評估基準日/報導日 : </label>
+                            <input type="text" id="datepicker" name="datepicker">
+                        </td>
+                        <td style="padding-top:5px;">
+                            <label>版本 : </label>
+                            <select id="version" name="version" class="form-control" style="display:inline-block" />
+                        </td>
+                        <td style="padding-top:5px;">
+                            &emsp;&emsp;&nbsp;<label>版本內容 : </label>
+                            <select id="content" name="content" class="form-control" style="display:inline-block" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-top:5px;">
+                            <label>覆核狀態 : </label>&emsp;&emsp;&nbsp;
+                            <select id="status" name="status" class="form-control" style="display:inline-block" />
+                        </td>
+                        <td style="padding-top:5px;">
+                            <label>產品 : </label>
+                            <select id="product" name="product" class="form-control" style="display:inline-block" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-top:10px;">
+                            <input type="button" class="btn btn-primary" value="查詢" id="btnD6RiskReviewSearch" style="margin-right:10px;" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    <div class="row main_body" style="overflow:auto;height:100%">
+        <div class="col-md-12">
+            <div class="viewDetail">
+                <div id="jqgridDiv" class="">
+                </div>
+                <div id="jqgridDiv2" class="" style="padding-top:10px">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        //註冊URL
+        var url = {};
+        url.version = '@Url.Action("GetD6Version","D6")';
+        url.status = '@Url.Action("GetD6Status","D6")';
+        url.product = '@Url.Action("GetD6Product","D6")';
+        url.handle = '@Url.Action("GetD6Handle","D6")';
+        url.review = '@Url.Action("GetD6Review","D6")';
+
+        //Joe:點選 ReportDate 觸發行為
+        var versionFun = function () {
+            //權限分流(查詢條件)
+            if (handle) {
+                customerUtility.getData(["version", "content"], $('#datepicker').val(), url.version, [selectFun, statusFun]);
+            } else {
+                customerUtility.getData(["version", "content", "status", "product"], $('#datepicker').val(), url.riskReview, null);
+            }
+        }
+
+        var statusFun = function () {
+            customerUtility.getData("status", [$('#datepicker').val(), $('#version').find(':selected').val()], url.status, selectFun);
+            customerUtility.getData("product", [$('#datepicker').val(), $('#version').find(':selected').val()], url.product, null);
+        }
+
+        var selectFun = function () {
+            $('select').each(function () {
+                var id = $(this).attr('id');
+                switch (id) {
+                    case 'version':
+                        $('#' + id + " option").each(function () {
+                            $(this).val($(this).text().split('_')[0]);
+                            $(this).text($(this).text().split('_')[0]);
+                        })
+                        break;
+                    case 'content':
+                    case 'status':
+                        $('#' + id + " option").each(function () {
+                            $(this).val($(this).text().split('_')[0]);
+                            $(this).text($(this).text().split('_')[1]);
+                        })
+                        break;
+                }
+            })
+        }
+
+        //註冊datepicker
+        created.createDatepicker('datepicker', true, '', versionFun);
+
+        //註冊verified
+        verified.datepicker("myForm", "datepicker", true, $('#datepicker').val());
+
+        $("#Impairment").val("All");
+        var handle = @ViewBag.getHandle.ToString().ToLower();
+        versionFun();
+
+        //註冊click事件
+        $('input:button').each(function () {
+            var id = $(this).attr('id');
+            switch (id) {
+                case 'btnD6RiskReviewSearch':
+                    $('#' + id).on('click', function () { search() });
+                    break;
+            }
+        })
+
+        //註冊select事件
+        $('select').each(function () {
+            var id = $(this).attr('id');
+            switch (id) {
+                case 'version':
+                case 'content':
+                    $('#' + id).on('change', function () {
+                        var _id = '';
+                        id == 'version' ? _id = 'content' : _id = 'version';
+                        $('#' + _id).val($('#' + id).val());
+                        statusFun();
+                    });
+                    break;
+            }
+        })
+
+        //Joe:查詢表單
+        //查詢量化評估需求資訊檔(經辦:查詢/修改)
+        //查詢風控覆核專區(經辦/覆核:查詢/修改)
+        function search() {
+            var data = [$('#datepicker').val(), $('#version').find(':selected').val()];
+            //權限分流(查詢結果)
+            url.search = url.handle;
+            if ($('#status').find(':selected').val() == undefined) {
+                alert('量化評估資料未全部完成複核,請查看複核狀況!');
+                return;
+            } else if ($('#status').find(':selected').val() != 0) {
+                url.search = url.review;
+            }
+            $('#jqgridDiv').children().remove();
+            if ($('#myForm').valid()) {
+                $.ajax({
+                    type: "POST",
+                    data: JSON.stringify({
+                        data: data
+                    }),
+                    dataType: "json",
+                    url: url.search,
+                    contentType: 'application/json',
+                })
+                    .done(function (result) {
+                        if (result.RETURN_FLAG) {
+                            createForm(result);
+                        }
+                        else {
+                            customerUtility.alert(result.DESCRIPTION, 'e');
+                        }
+                    })
+            }
+        }
+
+        //Joe:匯出報表
+        function exportReport(fileInfo) {
+            var parms = [], extensionParms = [];
+            parms.push(customerUtility.reportParm('ReportDate', $('#datepicker').val()));
+            extensionParms.push(customerUtility.reportParm('Format', fileInfo[3]));
+            switch (fileInfo[1]) {
+                case 'Summary':
+                    parms.push(customerUtility.reportParm('Version', $('#version').find(':selected').val()));
+                    extensionParms.push(customerUtility.reportParm('cTitle', fileInfo[2]));
+                    extensionParms.push(customerUtility.reportParm('ReportDate', $('#datepicker').val()));
+                    extensionParms.push(customerUtility.reportParm('Version', $('#version').find(':selected').val()));
+                    extensionParms.push(customerUtility.reportParm('Content', $('#content').find(':selected').val()));
+                    extensionParms.push(customerUtility.reportParm('Product', $('#product').find(':selected').val()));
+                    break;
+                case 'WarningIND':
+                case 'WatchIND':
+                    extensionParms.push(customerUtility.reportParm('ReportDate', $('#datepicker').val()));
+                    break;
+            }
+            customerUtility.report(
+                customerUtility.reportModel(fileInfo[0],fileInfo[1]),
+                parms,
+                extensionParms
+            );
+        };
+
+        //Joe:建立表單
+        function createForm(result) {
+            let htm = '';
+            let _htm = '<br><br><br><br>';
+            let idNames = ["Summary", "C07Advanced", "D62", "WarningIND", "WatchIND", "D63D64", "All"];
+            let reportNames = ["1.摘要/IFRS9金融工具-預期信用損失", "2.減損計算(C07_Advanced)", "3.基本要件測試(D62)", "4.預警名單", "5.觀察名單", "6.量化測試(D63、D64)", "7.全部"];
+            let htmButton = "<input type='button' class='btn btn-primary' style='width:85px;height:25px' id='_id' value='_value'>";
+            let htmlink = "<a href='javascript:void(0)' class='openDialog' style='text-decoration:underline' id='_id' name='_name'>_text</a >";
+            $('#jqgridDiv').append('<table id=head></table>');
+            let _caption = '風控覆核專區';
+            let _width = jqgridCustom.getwidth();
+            let _height = 201;
+            let colNum = 7;
+            let _colName = ["覆核<br/>狀態", "評估基準日<br/>/報導日", "版本", "版本內容", "產品", "匯出", "報表", "附件", "簽核意見", "執行動作"];
+            let _colModel = [
+                {//覆核狀態
+                    name: "Status", index: "Status", width: 85, sortable: false, align: "center",
+                    cellattr: function (rowId, tv, rawObject, cm, rdata) {
+                        return 'id=\'Status' + rowId + "\'";
+                    }
+                },
+                {//評估基準日/報導日
+                    name: "Date", index: "Date", width: 85, sortable: false, align: "center",
+                    cellattr: function (rowId, tv, rawObject, cm, rdata) {
+                        return 'id=\'Date' + rowId + "\'";
+                    }
+                },
+                {//版本
+                    name: "Version", index: "Version", width: 40, sortable: false, align: "center",
+                    cellattr: function (rowId, tv, rawObject, cm, rdata) {
+                        return 'id=\'Version' + rowId + "\'";
+                    }
+                },
+                {//版本內容
+                    name: "Content", index: "Content", width: 150, sortable: false, align: "center",
+                    cellattr: function (rowId, tv, rawObject, cm, rdata) {
+                        return 'id=\'Content' + rowId + "\'";
+                    }
+                },
+                {//產品
+                    name: "Product", index: "Product", width: 150, sortable: false, align: "center",
+                    cellattr: function (rowId, tv, rawObject, cm, rdata) {
+                        return 'id=\'Product' + rowId + "\'";
+                    }
+                },
+                {//匯出
+                    name: "Export", index: "Export", width: 40, sortable: false, align: "center",
+                    cellattr: function (rowId, tv, rawObject, cm, rdata) {
+                        return 'id=\'Export' + rowId + "\'";
+                    },
+                    editable: true, edittype: "checkbox", editoptions: { value: "True:False" },
+                    formatter: "checkbox", formatoptions: { disabled: false }
+                },
+                {//報表
+                    name: "Report", index: "Report", width: 180, sortable: false, align: "left",
+                    cellattr: function (rowId, tv, rawObject, cm, rdata) {
+                        return 'id=\'Report' + rowId + "\'";
+                    }
+                },
+                {//附件
+                    name: "Annex", index: "Annex", width: 90, sortable: false, align: "center",
+                    cellattr: function (rowId, tv, rawObject, cm, rdata) {
+                        return 'id=\'Annex' + rowId + "\'";
+                    }
+                },
+                {//簽核意見
+                    name: "Signing", index: "Signing", width: 90, sortable: false, align: "center",
+                    cellattr: function (rowId, tv, rawObject, cm, rdata) {
+                        return 'id=\'Signing' + rowId + "\'";
+                    }
+                },
+                {//執行動作
+                    name: "Action", index: "Action", width: 90, sortable: false, align: "left",
+                    cellattr: function (rowId, tv, rawObject, cm, rdata) {
+                        return 'id=\'Action' + rowId + "\'";
+                    }
+                }
+            ];
+
+            //Joe:建立欄位
+            var _data = [];
+            for (var i = 0; i < colNum; i++) {
+                _data.push({});
+            }
+
+            //Joe:顯示表單
+            $('#head').jqGrid({
+                datatype: "local",
+                shrinkToFit: false,
+                caption: _caption,
+                width: _width,
+                height: _height,
+                data: _data,
+                colNames: _colName,
+                colModel: _colModel,
+                loadComplete: function () {
+                    //覆核狀態
+                    htm = _htm + $('#status').find(':selected').text();
+                    $('#head').jqGrid('setRowData', 1, { Status: htm });
+                    customerUtility.rowFieldMerge('head', 'Status', 1, _data.length);
+                    //評估基準日/報導日
+                    htm = _htm + $('#datepicker').val();
+                    $('#head').jqGrid('setRowData', 1, { Date: htm });
+                    customerUtility.rowFieldMerge('head', 'Date', 1, _data.length);
+                    //版本
+                    htm = _htm + $('#version').find(':selected').text();
+                    $('#head').jqGrid('setRowData', 1, { Version: htm });
+                    customerUtility.rowFieldMerge('head', 'Version', 1, _data.length);
+                    //版本內容
+                    htm = _htm + $('#content').find(':selected').text();
+                    $('#head').jqGrid('setRowData', 1, { Content: htm });
+                    customerUtility.rowFieldMerge('head', 'Content', 1, _data.length);
+                    //產品
+                    htm = _htm + $('#product').find(':selected').text();
+                    $('#head').jqGrid('setRowData', 1, { Product: htm });
+                    customerUtility.rowFieldMerge('head', 'Product', 1, _data.length);
+                    //匯出
+                    $('#head').find('input[type=checkbox]').each(function (index) {
+                        $(this).attr('id', 'chk_' + idNames[index]);
+                        $(this).attr('name', 'chk_' + reportNames[index]);
+                    });
+                    //報表
+                    htm = htmButton.replace('_id', 'btn_Excel');
+                    htm = htm.replace('_value', '匯出Excel') + '&nbsp;';
+                    htm += htmButton.replace('_id', 'btn_PDF');
+                    htm = htm.replace('_value', '匯出PDF');
+                    reportNames.splice(reportNames.length - 1, 1, htm);
+                    for (var i = 0; i < reportNames.length; i++) {
+                        if (i < reportNames.length - 1) {
+                            htm = htmlink.replace('_id', 'link_Preview_' + idNames[i]);
+                            htm = htm.replace('_name', 'link_Preview_' + reportNames[i].split('/')[1]);
+                            htm = htm.replace('_text', reportNames[i].split('/')[0]);
+                            reportNames.splice(i, 1, htm);
+                        }
+                        $('#head').jqGrid('setRowData', i + 1, { Report: reportNames[i] });
+                    }
+                    //附件
+                    for (var i = 0; i < idNames.length - 1; i++) {
+                        htm = htmlink.replace('_id', 'link_UploadView_' + idNames[i]);
+                        htm = htm.replace('_text', '上傳或檢視(0)');
+                        $('#head').jqGrid('setRowData', i + 1, { Annex: htm });
+                    }
+                    //簽核意見
+                    htm = htmButton.replace('_id', 'btn_Signing');
+                    htm = htm.replace('_value', '下載簽核意見');
+                    idNames.splice(idNames.length - 1, 1, htm);
+                    for (var i = 0; i < idNames.length; i++) {
+                        if (i < idNames.length - 1) {
+                            htm = htmlink.replace('_id', 'link_ModifyView_' + idNames[i]);
+                            htm = htm.replace('_text', '修改或檢視(0)');
+                            idNames.splice(i, 1, htm);
+                        }
+                        $('#head').jqGrid('setRowData', i + 1, { Signing: idNames[i] });
+                    }
+                    //執行動作
+                    $('#head').jqGrid("setRowData", 1, { Action: '經辦:' });
+                    htm = htmButton.replace('_id', handle == true ? 'btn_Submit' : 'btn_Confirm');
+                    htm = htm.replace('_value', handle == true ? '呈送覆核' : '覆核確認') + '<br><br>';
+                    htm += htmButton.replace('_id', handle == true ? 'btn_Close' : 'btn_Return');
+                    htm = htm.replace('_value', handle == true ? '銷案' : '退回');
+                    $('#head').jqGrid("setRowData", 2, { Action: htm });
+                    customerUtility.rowFieldMerge('head', 'Action', 2, _data.length);
+
+                    //註冊checkbox事件
+                    $('#chk_All').change(function () {
+                        $('input:checkbox').not(this).prop('checked', this.checked);
+                    });
+                    //註冊link事件
+                    $('#head').find('a').each(function () {
+                        var id = $(this).attr('id');
+                        var idName = id.split('_')[1];
+                        switch (idName) {
+                            case 'Preview':
+                                $('#' + id).on('click', function () {
+                                    var cName = $(this).text().split('.')[1];
+                                    var eName = $(this).attr('id').split('_')[2];
+                                    var cTitle = $(this).attr('name').split('_')[2];
+                                    var format = $(this).attr('id').split('_')[1];
+                                    cTitle == 'undefined' ? cTitle = cName : null;
+                                    var fileInfo = [cName, eName, cTitle, format];
+                                    exportReport(fileInfo);
+                                })
+                                break;
+                            case 'UploadView':
+                                $('#' + id).on('click', function () {
+                                    alert(id);
+                                })
+                                break;
+                            case 'ModifyView':
+                                $('#' + id).on('click', function () {
+                                    alert(id);
+                                })
+                                break;
+                        }
+                    })
+                    //註冊click事件
+                    $('input:button').each(function () {
+                        var id = $(this).attr('id');
+                        switch (id) {
+                            case 'btn_Excel':
+                            case 'btn_PDF':
+                                $('#' + id).on('click', function () {
+                                    var cName = "";
+                                    var eName = "";
+                                    var cTitle = "";
+                                    var format = $(this).attr('id').split('_')[1];
+                                    $('#head').find(':checked').each(function () {
+                                        cName = $(this).attr('name').split('.')[1].split('/')[0];
+                                        eName = $(this).attr('id').split('_')[1];
+                                        cTitle = $(this).attr('name').split('.')[1].split('/')[1];
+                                        cTitle == undefined ? cTitle = cName : null;
+                                        var fileInfo = [cName, eName, cTitle, format];
+                                        exportReport(fileInfo);
+                                    });
+                                    if (cName == "" || eName == "" || cTitle == undefined) {
+                                        customerUtility.alert('請至少選擇一份文件!', 'e');
+                                    }
+                                });
+                                break;
+                            case 'btn_Signing':
+                                $('#' + id).on('click', function () {
+                                    alert(id);
+                                })
+                                break;
+                            case 'btn_Submit':
+                                $('#' + id).on('click', function () {
+                                    alert(id);
+                                })
+                                break;
+                            case 'btn_Close':
+                                $('#' + id).on('click', function () {
+                                    alert(id);
+                                })
+                                break;
+                            case 'btn_Confirm':
+                                $('#' + id).on('click', function () {
+                                    alert(id);
+                                })
+                                break;
+                            case 'btn_Return':
+                                $('#' + id).on('click', function () {
+                                    alert(id);
+                                })
+                                break;
+                        }
+                    })
+                }
+            })
+        }
+    });
+</script>

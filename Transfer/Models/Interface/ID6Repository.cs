@@ -157,7 +157,7 @@ namespace Transfer.Models.Interface
         /// <param name="Send_to_AuditorFlag">是否提交複核</param>
         /// <param name="referenceNbr">帳戶編號</param>
         /// <returns></returns>
-        List<D63ViewModel> getD63(DateTime reportDate, string boundNumber, Evaluation_Status_Type indexFlag, string assessmentSubKind, bool Send_to_AuditorFlag = false,string referenceNbr = "");
+        List<D63ViewModel> getD63(DateTime reportDate, string boundNumber, Evaluation_Status_Type indexFlag, string assessmentSubKind, bool Send_to_AuditorFlag = false, string referenceNbr = "");
 
         /// <summary>
         /// get D63 Assessment_Result_Version
@@ -190,7 +190,7 @@ namespace Transfer.Models.Interface
         /// <param name="Assessment_Result_Version"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        MSGReturnModel UpdateD63(string Reference_Nbr,int Assessment_Result_Version, Evaluation_Status_Type status);
+        MSGReturnModel UpdateD63(string Reference_Nbr, int Assessment_Result_Version, Evaluation_Status_Type status);
         #endregion 量化評估
 
         #region 質化評估
@@ -355,7 +355,7 @@ namespace Transfer.Models.Interface
         //190619 PGE需求新增
         List<Bond_Account_Info> GetA41AssessmentCheck(string reportDate, int version);
         //190619 PGE需求新增
-        MSGReturnModel AutoInsertD65ExtraCase(List<Bond_Account_Info> A41Data,string reportDate);
+        MSGReturnModel AutoInsertD65ExtraCase(List<Bond_Account_Info> A41Data, string reportDate);
 
         MSGReturnModel DeleteD65ByExtraCase(string referenceNbr, int version);
 
@@ -375,7 +375,7 @@ namespace Transfer.Models.Interface
         /// </summary>
         /// <param name="reportDate"></param>
         /// <returns></returns>
-        List<ReELViewModel> getReEL(string reportDate,string Group_Product_Code);
+        List<ReELViewModel> getReEL(string reportDate, string Group_Product_Code);
 
         /// <summary>
         /// 減損報表資料刪除作業
@@ -385,5 +385,36 @@ namespace Transfer.Models.Interface
         /// <param name="msg"></param>
         /// <returns></returns>
         MSGReturnModel ReEL(string reportDate, string flowId, string msg);
+
+        /// <summary>
+        /// Joe:查詢 Version_Info :版本/版本內容
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        List<VersionInfo> getD6Version(DateTime dt);
+
+        /// <summary>
+        /// Joe:查詢 Bond_Quantitative_Result :覆核狀態
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        List<StatusInfo> getD6Status(DateTime dt, int num);
+
+        /// <summary>
+        /// Joe:查詢 Flow_Apply_Status :產品
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        List<GroupProduct> getD6Product(DateTime dt, int num);
+
+        /// <summary>
+        /// Joe:查詢 Bond_Quantitative_Resource :風控經辦
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        List<string> getD6Handle(DateTime dt, int num);
     }
 }

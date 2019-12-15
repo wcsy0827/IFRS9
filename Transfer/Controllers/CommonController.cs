@@ -14,6 +14,7 @@ using Microsoft.Reporting.WebForms;
 using System.Data;
 using System.Reflection;
 using Transfer.ViewModels;
+using System.Xml.Linq;
 
 namespace Transfer.Controllers
 {
@@ -63,8 +64,8 @@ namespace Transfer.Controllers
                     if (_cacheData.Item1.ToString() == key)
                     {
                         return File(System.Text.Encoding.UTF8.GetBytes(_cacheData.Item2),
-                            "application/octet-stream", 
-                            $@"{_cacheData.Item1.GetDescription()}.txt");                    
+                            "application/octet-stream",
+                            $@"{_cacheData.Item1.GetDescription()}.txt");
                     }
                 }
             }
@@ -97,7 +98,8 @@ namespace Transfer.Controllers
 
         protected string mailLogLocation(string path)
         {
-            try {
+            try
+            {
                 string projectFile = Server.MapPath("~/mailTxt"); //預設txt位置
                 FileRelated.createFile(projectFile);
                 string folderPath = Path.Combine(projectFile, path); //合併路徑&檔名
@@ -196,13 +198,13 @@ namespace Transfer.Controllers
             checkMessageModel result = new checkMessageModel();
             if (Cache.IsSet(getCheckCacheKey(Key)))
             {
-                var _cacheData = (Tuple<Check_Table_Type,string>)Cache.Get(getCheckCacheKey(Key));
+                var _cacheData = (Tuple<Check_Table_Type, string>)Cache.Get(getCheckCacheKey(Key));
                 if (_cacheData.Item1.ToString() == Key)
                 {
                     result.message = _cacheData.Item2;
                     result.title = _cacheData.Item1.GetDescription();
-                }                  
-            }               
+                }
+            }
             return Json(result);
         }
         #endregion
@@ -320,15 +322,41 @@ namespace Transfer.Controllers
                 ReportWrapper rw = new ReportWrapper();
 
                 rw.ReportPath = Server.MapPath($"~/Report/Rdlc/{data.className}.rdlc");
+
                 for (int i = 0; i < ds.Tables.Count; i++)
                 {
                     rw.ReportDataSources.Add(new ReportDataSource("DataSet" + (i + 1).ToString(), ds.Tables[i]));
                 }
-                //rw.ReportDataSources.Add(new ReportDataSource("DataSet1", ds.Tables[0]));
-                rw.ReportParameters.Add(new ReportParameter("Title", title));
-                rw.ReportParameters.Add(new ReportParameter("ReportTitle", "富邦人壽"));
-                rw.ReportParameters.Add(new ReportParameter("Emp", $@"{AccountController.CurrentUserInfo.Name}({AccountController.CurrentUserName})"));
-                rw.ReportParameters.Add(new ReportParameter("Name", data.className));
+
+                //Joe:參數檢查
+                XDocument rdlcXml = XDocument.Load(rw.ReportPath);
+                XNamespace xmlns = rdlcXml.Root.FirstAttribute.Value;
+
+                foreach (XElement element in rdlcXml.Descendants(xmlns + "ReportParameter"))
+                {
+                    string parameter = element.FirstAttribute.Value;
+                    if (parameter == "DataSet1")
+                    {
+                        rw.ReportDataSources.Add(new ReportDataSource("DataSet1", ds.Tables[0]));
+                    }
+                    if (parameter == "Title")
+                    {
+                        rw.ReportParameters.Add(new ReportParameter("Title", title));
+                    }
+                    if (parameter == "ReportTitle")
+                    {
+                        rw.ReportParameters.Add(new ReportParameter("ReportTitle", "富邦人壽"));
+                    }
+                    if (parameter == "Emp")
+                    {
+                        rw.ReportParameters.Add(new ReportParameter("Emp", $@"{AccountController.CurrentUserInfo.Name}({AccountController.CurrentUserName})"));
+                    }
+                    if (parameter == "Name")
+                    {
+                        rw.ReportParameters.Add(new ReportParameter("Name", data.className));
+                    }
+                }
+
                 if (extensionParms != null)
                     rw.ReportParameters.AddRange(extensionParms.Select(x => new ReportParameter(x.key, x.value)));
                 if (eparm.Any())
@@ -349,8 +377,8 @@ namespace Transfer.Controllers
 
         public class reportModel
         {
-           public string title { get; set; }
-           public string className { get; set; }
+            public string title { get; set; }
+            public string className { get; set; }
         }
 
         public class checkMessageModel

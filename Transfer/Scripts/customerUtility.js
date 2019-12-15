@@ -3,6 +3,60 @@
 
     window.customerUtility = customerUtility;
 
+    //Joe:欄位合併
+    customerUtility.rowFieldMerge = function (formID, colName, startNum, endNum) {
+        var rowNum = startNum;
+        var rowspanNum = endNum;
+        if (rowNum == 0) {
+            startNum = 1;
+        }
+        if (endNum - startNum == 1) {
+            rowspanNum = 2;
+        }
+        $('#' + colName + rowNum).attr('rowspan', rowspanNum);
+        for (var i = startNum + 1; i <= endNum; i++) {
+            $('#' + formID).setCell(i, colName, '', { display: 'none' });
+        }
+    }
+
+    //Joe:Select 連動顯示
+    customerUtility.getData = function (selectId, data, url, event) {
+        var isArray = [].concat(selectId || []);
+        for (var i = 0; i <= isArray.length; i++) {
+            $("#" + isArray[i] + " option").remove();
+        }
+        $.ajax({
+            type: "POST",
+            data: JSON.stringify({
+                data: data
+            }),
+            dataType: "json",
+            url: url,
+            contentType: 'application/json',
+        })
+            .done(function (result) {
+                if (result.RETURN_FLAG) {
+                    var optionObj = [];
+                    optionObj.push({ value: "", text: "" });
+                    $.each(result.Datas.Data, function (key, value) {
+                        optionObj.push({ value: value, text: value });
+                    })
+                    var isArray = [].concat(selectId || []);
+                    for (var i = 0; i <= isArray.length; i++) {
+                        customerUtility.addoption(isArray[i], optionObj);
+                    }
+                    var isArray = [].concat(event || []);
+                    for (var i = 0; i <= isArray.length; i++) {
+                        if (typeof isArray[i] == 'function') {
+                            isArray[i]();
+                        }
+                    }
+                } else {
+                    customerUtility.alert(result.DESCRIPTION, 'e');
+                }
+            })
+    }
+
     customerUtility.addoption = function (selectId, obj) {
         $.each(obj, function (key, data) {
             let value = data.value || '';
@@ -11,7 +65,7 @@
             let Text = data.Text || '';
             if (value != '' && text != '')
                 $("#" + selectId).append($("<option></option>").attr("value", data.value).text(data.text));
-            if(Value != '' && Text != '')
+            if (Value != '' && Text != '')
                 $("#" + selectId).append($("<option></option>").attr("value", data.Value).text(data.Text));
         })
     }
@@ -38,20 +92,20 @@
                 url: url,
                 contentType: 'application/json',
             })
-            .done(function (result) {
-                $("#" + selectId + " option").remove();
-                if (result.RETURN_FLAG) {
-                    var optionObj = [];
-                    optionObj.push({ value: "", text: "" })
-                    $.each(result.Datas.Data, function (key, value) {
-                        optionObj.push({ value: value, text: value })
-                    })
-                    customerUtility.addoption(selectId, optionObj);
-                }
-                else {
-                    versionFun.fail();
-                }
-            });
+                .done(function (result) {
+                    $("#" + selectId + " option").remove();
+                    if (result.RETURN_FLAG) {
+                        var optionObj = [];
+                        optionObj.push({ value: "", text: "" })
+                        $.each(result.Datas.Data, function (key, value) {
+                            optionObj.push({ value: value, text: value })
+                        })
+                        customerUtility.addoption(selectId, optionObj);
+                    }
+                    else {
+                        versionFun.fail();
+                    }
+                });
         }
 
         return versionFun;
@@ -59,13 +113,11 @@
         //#endregion 選擇reportDate 後要觸發的動作
     }
 
-    customerUtility.getD54 = function (datepickerId, tableName, url)
-    {
+    customerUtility.getD54 = function (datepickerId, tableName, url) {
         var Fun = {};
         Fun.fail = function () {
         }
-        Fun.success = function ()
-        {
+        Fun.success = function () {
             $.ajax({
                 type: "POST",
                 data: JSON.stringify({
@@ -75,12 +127,11 @@
                 url: url,
                 contentType: 'application/json',
             })
-            .done(function (result) {
-                if (result.RETURN_FLAG)
-                {
-                    customerUtility.alert(result.DESCRIPTION, 'w');
-                }
-            });
+                .done(function (result) {
+                    if (result.RETURN_FLAG) {
+                        customerUtility.alert(result.DESCRIPTION, 'w');
+                    }
+                });
         }
         return Fun;
     }
@@ -118,7 +169,7 @@
     //var delete_cookie = function (name) {
     //    document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     //};
-    
+
     customerUtility.reportUrl = '';
     customerUtility.reportCommonUrl = '';
     //data => title,className
@@ -135,19 +186,24 @@
                 extensionParms: extensionParms
             }),
         })
-        .done(function (result) {
-            if (result.RETURN_FLAG) {
-                window.open(customerUtility.reportUrl);
-            }
-            else
-                customerUtility.alert(result.DESCRIPTION,'e');
-        })
+            .done(function (result) {
+                if (result.RETURN_FLAG) {
+                    if (extensionParms.length >= 1 && extensionParms[0].value == 'Excel' || extensionParms.length >= 1 && extensionParms[0].value == 'PDF') {
+                        window.location = customerUtility.reportUrl;
+                    }
+                    else {
+                        window.open(customerUtility.reportUrl);
+                    }
+                }
+                else
+                    customerUtility.alert(result.DESCRIPTION, 'e');
+            })
     };
 
     customerUtility.reportModel = function (
         title,
         className
-        ) {
+    ) {
         var obj = {};
         obj['title'] = title;
         obj['className'] = className;
@@ -157,7 +213,7 @@
     customerUtility.reportParm = function (
         key,
         value
-        ) {
+    ) {
         var obj = {};
         obj['key'] = key;
         obj['value'] = value;
@@ -171,9 +227,9 @@
         });
     $('.select-editable select').on('change',
         function () {
-        $(this).next().trigger('focusout');
-    });
-       
+            $(this).next().trigger('focusout');
+        });
+
     customerUtility.remove = function (obj, el) {
         // if the collections is an array
         if (obj instanceof Array) {
@@ -189,25 +245,22 @@
             }
 
         }
-            // it's an object
+        // it's an object
         else if (obj.hasOwnProperty(el)) {
             delete obj[el];
         }
         return obj;
     }
 
-    customerUtility.fixCheckbox = function ()
-    {
+    customerUtility.fixCheckbox = function () {
         $('.checkbox').find('input[type=checkbox]').next('[type=hidden]').remove();
     }
 
-    customerUtility.alert = function (message, type)
-    {
+    customerUtility.alert = function (message, type) {
         let flag = '';
         //flag = 'toastr';
         flag = 'alert';
-        if (flag == 'toastr')
-        {
+        if (flag == 'toastr') {
             type = type || '';
             if (type == 's') //
                 toastr.success(message);
@@ -225,13 +278,11 @@
     }
 
     customerUtility.checkCacheCommonUrl = '';
-    customerUtility.checkDialog = function (id, key, message)
-    {
+    customerUtility.checkDialog = function (id, key, message) {
         id = id || '';
-        if (id != '')
-        {
+        if (id != '') {
             let divId = 'IFRS9CheckDialog';
-            let dialogId = divId + id;        
+            let dialogId = divId + id;
             let _message = message || '';
             if (_message == '') {
                 $.ajax({
@@ -243,11 +294,11 @@
                     }),
                 })
                     .done(function (result) {
-                        
-                    _message = result.message;
-                    let _title = result.title;
-                    checkDataDialog(divId, dialogId, id, _message, _title, key);
-                })
+
+                        _message = result.message;
+                        let _title = result.title;
+                        checkDataDialog(divId, dialogId, id, _message, _title, key);
+                    })
             }
             else {
                 checkDataDialog(divId, dialogId, id, _message);
@@ -255,13 +306,11 @@
         }
     }
 
-    function checkDataDialog(divId,dialogId, id, message,title,key)
-    {
+    function checkDataDialog(divId, dialogId, id, message, title, key) {
         title = title || '';
         message = message || '';
         key = key || '';
-        if (message != '')
-        {
+        if (message != '') {
             let str = '';
             str += '<div id ="' + dialogId + '" style="display:none">'
             str += '<table style="width:100%">';
@@ -270,8 +319,7 @@
             str += '<textarea id="' + id + '" readonly maxlength="255" style="overflow-y: scroll; white-space:pre-wrap;max-width:100%;width:100%;height:500px;" ></textarea>';
             str += '</td>';
             str += '</tr>';
-            if (key != '')
-            {
+            if (key != '') {
                 str += '<tr>';
                 str += '<td style="width:120px">';
                 str += '<label>下載訊息檔 : </label>';
@@ -280,7 +328,7 @@
                 str += "<a href='#' class='openDialog dlfile' id='" + id + "DLFile'  return:false; name='" + id + "' title='" + title + "'>" + title + "</a>";
                 str += '</td>';
                 str += '</tr>';
-            }         
+            }
             str += '</table>';
             str += '</div>';
             $('#' + divId).append(str);
@@ -300,8 +348,7 @@
             });
             $("#" + dialogId).dialog("open");
             $('#' + id).scrollTop(0);
-            if (key != '')
-            {
+            if (key != '') {
                 $('#' + id + 'DLFile').off('click');
                 $('#' + id + 'DLFile').on('click', function () {
                     window.location.href = customerUtility.checkMessageDL + key;
