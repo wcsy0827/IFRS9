@@ -3,6 +3,23 @@
 
     window.customerUtility = customerUtility;
 
+    //Joe:設定選單資料
+    customerUtility.setSelect = function (selectId, char, index1, index2) {
+        var val = "";
+        var text = "";
+        var isArray = [].concat(selectId || []);
+        for (var i = 0; i <= isArray.length; i++) {
+            $('#' + isArray[i] + " option").each(function () {
+                val = $(this).val();
+                text = $(this).text();
+                val = val.indexOf(char) >= 0 ? $(this).val().split(char)[index1] : val;
+                text = text.indexOf(char) >= 0 ? $(this).text().split(char)[index2] : text;
+                $(this).val(val);
+                $(this).text(text);
+            })
+        }
+    }
+
     //Joe:欄位合併
     customerUtility.rowFieldMerge = function (formID, colName, startNum, endNum) {
         var rowNum = startNum;

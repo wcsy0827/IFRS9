@@ -1677,6 +1677,9 @@ namespace Transfer.Models.Repository
                 int watchINDYCount = 0;
                 int watchINDNCount = 0;
                 int watchINDNULLCount = 0;
+                int warningINDYCount = 0;
+                int warningINDNCount = 0;
+                int warningINDNULLCount = 0;
 
                 List<Bond_Basic_Assessment> listBond_Basic_Assessment = db.Bond_Basic_Assessment.AsNoTracking()
                                                                           .Where(x => x.Report_Date >= dateReportDateStart
@@ -1691,12 +1694,128 @@ namespace Transfer.Models.Repository
                 watchINDNCount = listBond_Basic_Assessment.Where(x => x.Watch_IND == "N").Count();
                 watchINDNULLCount = listBond_Basic_Assessment.Where(x => x.Watch_IND == "" || x.Watch_IND == null).Count();
 
-                message = $"基準日：{reportDateStart} ~ {reportDateEnd}，<br/>";
-                message += $@"基本要件通過=Y：{basicPassYCount.ToString()} 筆，<br/>基本要件通過=N：{basicPassNCount.ToString()} 筆，<br/>基本要件通過=空：{basicPassNULLCount.ToString()} 筆。<br/>";
-                message += $@"觀察名單=Y：{watchINDYCount.ToString()} 筆，<br/>觀察名單=N：{watchINDNCount.ToString()} 筆，<br/>觀察名單=空：{watchINDNULLCount.ToString()} 筆。";
+                warningINDYCount = listBond_Basic_Assessment.Where(x => x.Warning_IND == "Y").Count();
+                warningINDNCount = listBond_Basic_Assessment.Where(x => x.Warning_IND == "N").Count();
+                warningINDNULLCount = listBond_Basic_Assessment.Where(x => x.Warning_IND == "" || x.Warning_IND == null).Count();
+
+                message = $"基準日：{reportDateStart} ~ {reportDateEnd}。<br/>";
+                message += $@"基本要件通過=Y：{basicPassYCount.ToString()} 筆。<br/>基本要件通過=N：{basicPassNCount.ToString()} 筆。<br/>基本要件通過=空：{basicPassNULLCount.ToString()} 筆。<br/>";
+                message += $@"觀察名單=Y：{watchINDYCount.ToString()} 筆。<br/>觀察名單=N：{watchINDNCount.ToString()} 筆。<br/>觀察名單=空：{watchINDNULLCount.ToString()} 筆。<br/>";
+                message += $@"預警名單=Y：{warningINDYCount.ToString()} 筆。<br/>預警名單=N：{warningINDNCount.ToString()} 筆。<br/>預警名單=空：{warningINDNULLCount.ToString()} 筆。";
             }
 
             return message;
+        }
+        #endregion
+
+        //Joe:取得基本要件測試資料
+        #region getSummaryBasicTest
+        public Tuple<int, List<BondBasicAssessment>> getSummaryBasicTest(DateTime dt, string basicPass)
+        {
+            int basicCount = 0;
+            List<BondBasicAssessment> result = new List<BondBasicAssessment>();
+
+            using (IFRS9DBEntities db = new IFRS9DBEntities())
+            {
+                basicCount = db.Bond_Basic_Assessment
+                    .AsNoTracking()
+                    .Where(x => x.Report_Date == dt && x.Basic_Pass == basicPass)
+                    .Count();
+
+                result = db.Bond_Basic_Assessment
+                    .AsNoTracking()
+                    .Join(db.Basic_Assessment_Parm
+                    .AsNoTracking()
+                    , BondBasicAssessment => BondBasicAssessment.Map_Rule_Id_D69
+                    , BasicAssessmentParm => BasicAssessmentParm.Rule_ID
+                    , (BondBasicAssessment, BasicAssessmentParm) => new { BondBasicAssessment, BasicAssessmentParm })
+                    .Where(x => x.BondBasicAssessment.Report_Date == dt && x.BondBasicAssessment.Basic_Pass == basicPass)
+                    .GroupBy(x => new { x.BondBasicAssessment.Map_Rule_Id_D69, x.BasicAssessmentParm.Rule_desc })
+                    .Select(x => new BondBasicAssessment
+                    {
+                        RuleID = x.Key.Map_Rule_Id_D69.ToString(),
+                        RuleDesc = x.Key.Rule_desc,
+                        NumberPen = x.Count().ToString()
+                    })
+                    .Distinct()
+                    .OrderBy(x => x)
+                    .ToList();
+            }
+            return new Tuple<int, List<BondBasicAssessment>>(basicCount, result);
+        }
+        #endregion
+
+        //Joe:取得觀察名單資料
+        #region getSummaryWatchIND
+        public Tuple<int, List<BondBasicAssessment>> getSummaryWatchIND(DateTime dt, string watchIND)
+        {
+            int watchCount = 0;
+            List<BondBasicAssessment> result = new List<BondBasicAssessment>();
+
+            using (IFRS9DBEntities db = new IFRS9DBEntities())
+            {
+                watchCount = db.Bond_Basic_Assessment
+                    .AsNoTracking()
+                    .Where(x => x.Report_Date == dt && x.Watch_IND == watchIND)
+                    .Count();
+
+                result = db.Bond_Basic_Assessment
+                    .AsNoTracking()
+                    .Join(db.Watching_List_Parm
+                    .AsNoTracking()
+                    , BondBasicAssessment => BondBasicAssessment.Map_Rule_Id_D70
+                    , WatchingListParm => WatchingListParm.Rule_ID.ToString()
+                    , (BondBasicAssessment, WatchingListParm) => new { BondBasicAssessment, WatchingListParm })
+                    .Where(x => x.BondBasicAssessment.Report_Date == dt && x.BondBasicAssessment.Watch_IND == watchIND)
+                    .GroupBy(x => new { x.BondBasicAssessment.Map_Rule_Id_D70, x.WatchingListParm.Rule_desc })
+                    .Select(x => new BondBasicAssessment
+                    {
+                        RuleID = x.Key.Map_Rule_Id_D70.ToString(),
+                        RuleDesc = x.Key.Rule_desc,
+                        NumberPen = x.Count().ToString()
+                    })
+                    .Distinct()
+                    .OrderBy(x => x)
+                    .ToList();
+            }
+            return new Tuple<int, List<BondBasicAssessment>>(watchCount, result);
+        }
+        #endregion
+
+        //Joe:取得預警名單資料
+        #region getSummaryWarningIND
+        public Tuple<int, List<BondBasicAssessment>> getSummaryWarningIND(DateTime dt, string warningIND)
+        {
+            int warningCount = 0;
+            List<BondBasicAssessment> result = new List<BondBasicAssessment>();
+
+            using (IFRS9DBEntities db = new IFRS9DBEntities())
+            {
+                warningCount = db.Bond_Basic_Assessment
+                    .AsNoTracking()
+                    .Where(x => x.Report_Date == dt && x.Warning_IND == warningIND)
+                    .Count();
+
+                result = db.Bond_Basic_Assessment
+                    .AsNoTracking()
+                    .Join(db.Warning_List_Parm
+                    .AsNoTracking()
+                    , BondBasicAssessment => BondBasicAssessment.Map_Rule_Id_D71
+                    , WarningListParm => WarningListParm.Rule_ID.ToString()
+                    , (BondBasicAssessment, WarningListParm) => new { BondBasicAssessment, WarningListParm })
+                    .Where(x => x.BondBasicAssessment.Report_Date == dt && x.BondBasicAssessment.Warning_IND == warningIND)
+                    .GroupBy(x => new { x.BondBasicAssessment.Map_Rule_Id_D71, x.WarningListParm.Rule_desc })
+                    .Select(x => new BondBasicAssessment
+                    {
+                        RuleID = x.Key.Map_Rule_Id_D71.ToString(),
+                        RuleDesc = x.Key.Rule_desc,
+                        NumberPen = x.Count().ToString()
+                    })
+                    .Distinct()
+                    .OrderBy(x => x)
+                    .ToList();
+            }
+            return new Tuple<int, List<BondBasicAssessment>>(warningCount, result);
         }
         #endregion
 
@@ -3289,21 +3408,21 @@ AND Version = @Version ; ";
                                 .ThenByDescending(y => y.Send_to_Auditor == "Y")
                                 .ThenByDescending(y => y.Assessment_Result_Version).FirstOrDefault()).ToList();
                     result.ForEach(x =>
-                    {
-                        var list = results.Where(y => y.Reference_Nbr == x.Reference_Nbr).ToList();
-                        var _status = getD63Status(list);
-                        var rejectFlag =
-                          (_status == Evaluation_Status_Type.ReviewCompleted ||
-                           _status == Evaluation_Status_Type.Review) ? false :
-                           (list.Count >= 2 && list.Any(z => z.Auditor_Return == "Y"));
-                        list.ForEach(y =>
-                        {
-                            y.Status = y.Auditor_Return == "Y" ?
-                            Evaluation_Status_Type.Reject.GetDescription() :
-                            rejectFlag ? "複核被退回請重新提交" : _status.GetDescription();
-                            y.Result_Version_Confirm_Flag = getResultVersionConfirmFlag(_status);
-                        });
-                    });
+                      {
+                          var list = results.Where(y => y.Reference_Nbr == x.Reference_Nbr).ToList();
+                          var _status = getD63Status(list);
+                          var rejectFlag =
+                            (_status == Evaluation_Status_Type.ReviewCompleted ||
+                             _status == Evaluation_Status_Type.Review) ? false :
+                             (list.Count >= 2 && list.Any(z => z.Auditor_Return == "Y"));
+                          list.ForEach(y =>
+                          {
+                              y.Status = y.Auditor_Return == "Y" ?
+                              Evaluation_Status_Type.Reject.GetDescription() :
+                              rejectFlag ? "複核被退回請重新提交" : _status.GetDescription();
+                              y.Result_Version_Confirm_Flag = getResultVersionConfirmFlag(_status);
+                          });
+                      });
                     if ((indexFlag & Evaluation_Status_Type.NotAssess) == Evaluation_Status_Type.NotAssess)
                         result = result.Where(x => x.Status == Evaluation_Status_Type.NotAssess.GetDescription()).ToList();
                     if ((indexFlag & Evaluation_Status_Type.NotReview) == Evaluation_Status_Type.NotReview)
@@ -6985,7 +7104,7 @@ FROM TEMP ";
         /// </summary>
         /// <param name="datas"></param>
         /// <returns></returns>
-        private List<D64ViewModel> D63GetD64(List<D63ViewModel> datas)
+        public List<D64ViewModel> D63GetD64(List<D63ViewModel> datas)
         {
             List<D64ViewModel> results = new List<D64ViewModel>();
             datas.ForEach(x =>
@@ -7847,12 +7966,17 @@ FROM TEMP ";
                     , GroupProduct => GroupProduct.Group_Product_Code
                     , (FlowApplyStatus, GroupProduct) => new { FlowApplyStatus, GroupProduct })
                     .Where(x => x.FlowApplyStatus.Report_Date == dt && x.FlowApplyStatus.Version == num && x.FlowApplyStatus.Flow_Result == "0")
-                    .Select(x => new GroupProduct
+                    .GroupJoin(db.Group_Product_Code_Mapping
+                    .AsNoTracking()
+                    , GroupProduct => GroupProduct.GroupProduct.Group_Product_Code
+                    , Group_Product_Code_Mapping => Group_Product_Code_Mapping.Group_Product_Code
+                    , (GroupProduct, Group_Product_Code_Mapping) => new GroupProduct
                     {
-                        GroupProductName = x.GroupProduct.Group_Product_Name,
-                        GroupProductCode = x.GroupProduct.Group_Product_Code
+                        GroupProductName = GroupProduct.GroupProduct.Group_Product_Name,
+                        GroupProductCode = GroupProduct.GroupProduct.Group_Product_Code,
+                        ProductCode = Group_Product_Code_Mapping.Select(GroupProductCodeMapping => GroupProductCodeMapping.Product_Code)
                     })
-                    .Distinct()
+                    .AsEnumerable()
                     .OrderBy(x => x)
                     .ToList();
             }
@@ -7860,7 +7984,7 @@ FROM TEMP ";
         }
 
         /// <summary>
-        /// Joe:查詢 Bond_Quantitative_Resource :風控經辦
+        /// Joe:查詢 Bond_Quantitative_Resource :風控覆核專區(經辦)
         /// </summary>
         /// <param name="dt"></param>
         /// <param name="num"></param>

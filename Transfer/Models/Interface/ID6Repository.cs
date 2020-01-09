@@ -410,7 +410,7 @@ namespace Transfer.Models.Interface
         List<GroupProduct> getD6Product(DateTime dt, int num);
 
         /// <summary>
-        /// Joe:查詢 Bond_Quantitative_Resource :風控經辦
+        /// Joe:查詢 Bond_Quantitative_Resource :風控覆核專區(經辦)
         /// </summary>
         /// <param name="dt"></param>
         /// <param name="num"></param>

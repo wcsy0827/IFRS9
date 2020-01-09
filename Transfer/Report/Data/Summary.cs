@@ -1,8 +1,13 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
+using System.Linq;
+using System.Xml.Linq;
 using Transfer.Utility;
-using System.Collections.Generic;
+using Transfer.ViewModels;
 using System.Data.SqlClient;
-using System;
+using System.Collections.Generic;
+using Transfer.Models.Repository;
+using System.Text.RegularExpressions;
 
 namespace Transfer.Report.Data
 {
@@ -11,61 +16,79 @@ namespace Transfer.Report.Data
         public override DataSet GetData(List<reportParm> parms)
         {
             DataSet resultsTable = new DataSet();
+            C0Repository c0Repository = new C0Repository();
+            D6Repository d6Repository = new D6Repository();
+
+            string sql = string.Empty;
+            string className = parms.Where(x => x.key == "ClassName").FirstOrDefault()?.value ?? string.Empty;
+            string reportDate = parms.Where(x => x.key == "ReportDate").FirstOrDefault()?.value ?? string.Empty;
+            string version = parms.Where(x => x.key == "Version").FirstOrDefault()?.value ?? string.Empty;
+            string groupProductCode = parms.Where(x => x.key == "GroupProductCode").FirstOrDefault()?.value ?? string.Empty;
+            string groupProductName = groupProductCode.Split(' ')[0];
+            string productCode = parms.Where(x => x.key == "ProductCode").FirstOrDefault()?.value ?? string.Empty;
+
+            reportDate = reportDate.Replace('/', '-');
+            DateTime _reportDate = DateTime.Parse(reportDate);
+            groupProductCode = Regex.Replace(groupProductCode, "[^0-9]", "");
+
+            Tuple<bool, List<C07AdvancedSumViewModel>> ECLData = c0Repository.getC07AdvancedSum(reportDate, version, groupProductCode, groupProductName, "All", "", "", productCode);
+            Tuple<int, List<BondBasicAssessment>> BTYCData = d6Repository.getSummaryBasicTest(_reportDate, "Y");
+            Tuple<int, List<BondBasicAssessment>> BTNCData = d6Repository.getSummaryBasicTest(_reportDate, "N");
+            Tuple<int, List<BondBasicAssessment>> WIYCData = d6Repository.getSummaryWatchIND(_reportDate, "Y");
+            Tuple<int, List<BondBasicAssessment>> WIIYCData = d6Repository.getSummaryWarningIND(_reportDate, "Y");
+
+            DataTable dt = ECLData.Item2.ToDataTable();
+            int[] num = { BTYCData.Item1, BTNCData.Item1, WIYCData.Item1, WIIYCData.Item1 };
+            List<List<BondBasicAssessment>> desc = new List<List<BondBasicAssessment>> { BTYCData.Item2, BTNCData.Item2, WIYCData.Item2, WIIYCData.Item2 };
+            Tuple<int[], List<List<BondBasicAssessment>>> fieldInfo = new Tuple<int[], List<List<BondBasicAssessment>>>(num, desc);
+
+            XDocument rdlcXml = XDocument.Load(AppDomain.CurrentDomain.BaseDirectory + "/Report/Rdlc/" + className + ".rdlc");
+            XNamespace xmlns = rdlcXml.Root.FirstAttribute.Value;
+
+            int count = 0;
+            string lastField = "";
+            string firstField = "";
+
+            sql = "SELECT" + "\n";
+            for (int i = 0; i < 3; i++)
+            {
+                firstField = rdlcXml.Descendants(xmlns + "Field").ElementAt(i).FirstAttribute.Value;
+                sql += "ISNULL(CONVERT(VARCHAR(MAX),CONVERT(MONEY,'" + dt.Rows[0].Field<string>(firstField) + "'),1),0)AS " + firstField + ",\n";
+            }
+            sql = sql.Trim().Trim(',') + "\n";
+
+            for (int j = 3; j < rdlcXml.Descendants(xmlns + "Field").Count(); j++)
+            {
+                lastField = rdlcXml.Descendants(xmlns + "Field").ElementAt(j).FirstAttribute.Value;
+
+                if (j % 2 == 1)
+                {
+                    firstField = lastField;
+                }
+                else
+                {
+                    for (int k = 0; k < fieldInfo.Item2[count].Count; k++)
+                    {
+                        if (k != 0) { sql += "UNION" + "\n"; }
+                        sql += "SELECT" + "\n";
+                        sql += "'" + fieldInfo.Item1[count] + "' AS " + firstField + ",\n";
+                        sql += "'" + fieldInfo.Item2[count][k].BondBasicAssessmentData() + "' AS " + lastField + "\n";
+                    }
+                    if (!fieldInfo.Item2[count].Any())
+                    {
+                        sql += "SELECT" + "\n";
+                        sql += "'" + fieldInfo.Item1[count] + "' AS " + firstField + ",\n";
+                        sql += "'無' AS " + lastField + "\n";
+                    }
+                    count++;
+                }
+            }
+
             using (SqlConnection conn = new SqlConnection(defaultConnection))
             {
-                string sql = string.Empty;
-                DateTime reportDate = DateTime.Parse(parms[0].value);
-                string _reportDate = reportDate.ToString("yyyy-MM-dd");
-                string version = parms[1].value;
-                
-                //Joe:結果輸出
-                sql +=string.Format(
-                    @"
-                    DECLARE @REPORT_DATE DATE = '{0}', @VERSION INT = '{1}';
-                    
-                    SELECT
-                    (
-                    ---C07或是C07Advanced中'一年期預期信用損失(台幣)'加總
-                    SELECT ISNULL(CONVERT(VARCHAR(MAX),CONVERT(MONEY,SUM([Y1_EL])),1),0)
-                    FROM [IFRS9].[DBO].[EL_DATA_OUT]
-                    WHERE REPORT_DATE = @REPORT_DATE AND VERSION = @VERSION) AS OneYECL,
-                    (
-                    ---C07或是C07Advanced中'存續期間預期信用損失(台幣)'加總
-                    SELECT ISNULL(CONVERT(VARCHAR(MAX),CONVERT(MONEY,SUM([Lifetime_EL])),1),0)
-                    FROM [IFRS9].[DBO].[EL_DATA_OUT]
-                    WHERE REPORT_DATE = @REPORT_DATE AND VERSION = @VERSION) AS LifetimeECL,
-                    (
-                    ---C07或是C07Advanced中'曝險額(台幣)'加總
-                    SELECT 0.0) AS Balance;
-
-                    SELECT
-                    (
-                    ---筆數統計:可參考D62報表之S欄(對應D69-基本要件參數檔規則編號)
-                    SELECT 0.0) AS PassNumber,
-                    (
-                    SELECT 0.0) AS FailNumber,
-                    (
-                    ---規則敘述:可參考D69參數檔Rule_desc
-                    SELECT 0.0) AS PassDescription,
-                    (
-                    SELECT 0.0) AS FailDescription;
-
-                    SELECT
-                    (
-                    ---筆數統計:可參考D62報表之AG欄(對應D71-預警名單參數檔規則編號)
-                    SELECT 0.0) AS WarnNumber,
-                    (
-                    SELECT 0.0) AS WatchNumber,
-                    (
-                    ---規則敘述:可參考D71參數檔Rule_desc
-                    SELECT 0.0) AS WarnDescription,
-                    (
-                    SELECT 0.0) AS WatchDescription;
-
-                    ", _reportDate,version);
-
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
+                    Extension.NlogSet(cmd.CommandText);
                     conn.Open();
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     adapter.Fill(resultsTable);

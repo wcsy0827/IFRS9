@@ -99,13 +99,12 @@ namespace Transfer.Models.Interface
         /// <returns></returns>
         string getUserDebt(string account);
 
-        //Joe:取得表單權限
+        //Joe:取得使用者名稱
         /// <summary>
-        /// get user menu
+        /// get user name
         /// </summary>
         /// <param name="userId"></param>
-        /// <param name="menuId"></param>
         /// <returns></returns>
-        bool getUserMenu(string userId, string menuId);
+        string getUserName(string userId);
     }
 }

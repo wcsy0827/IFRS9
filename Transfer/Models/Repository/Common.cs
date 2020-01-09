@@ -614,34 +614,27 @@ namespace Transfer.Models.Repository
             return DateTime.FromOADate(d).ToString("yyyy/MM/dd");
         }
 
-        //Joe:取得表單權限
+        //Joe:取得使用者名稱
         /// <summary>
-        /// get user menu
+        /// get user name
         /// </summary>
         /// <param name="userId"></param>
-        /// <param name="menuId"></param>
         /// <returns></returns>
-        public bool getUserMenu(string userId, string menuId)
+        public string getUserName(string userId)
         {
-            bool result = false;
             List<string> data = new List<string>();
 
             using (IFRS9DBEntities db = new IFRS9DBEntities())
             {
-                data = db.IFRS9_Menu_Set
+                data = db.IFRS9_User
                     .AsNoTracking()
-                    .Where(x => x.User_Account == userId && x.Menu_Id == menuId && x.Effective == "Y")
-                    .Select(x => x.Effective)
+                    .Where(x => x.User_Account == userId)
+                    .Select(x => x.User_Name)
                     .Distinct()
                     .OrderBy(x => x)
                     .ToList();
             }
-
-            if (data.Any())
-            {
-                result = true;
-            }
-            return result;
+            return data[0];
         }
     }
 }

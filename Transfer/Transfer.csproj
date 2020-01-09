@@ -627,6 +627,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Report\Data\Bond_Accounting_EL.cs" />
+    <Compile Include="Report\Data\C07Advanced.cs" />
     <Compile Include="Report\Data\D02_5.cs" />
     <Compile Include="Report\Data\D02_2.cs" />
     <Compile Include="Report\Data\D02_1.cs" />
@@ -634,6 +635,9 @@
     <Compile Include="Report\Data\D02_4.cs" />
     <Compile Include="Report\Data\D02_4_1.cs" />
     <Compile Include="Report\Data\D02_4_2.cs" />
+    <Compile Include="Report\Data\D62.cs" />
+    <Compile Include="Report\Data\D63.cs" />
+    <Compile Include="Report\Data\D64.cs" />
     <Compile Include="Report\Data\Debt_Change_FVOCI.cs" />
     <Compile Include="Report\Data\Debt_Change_AC.cs" />
     <Compile Include="Report\Data\Debt_Change_Details_Final.cs" />
@@ -648,8 +652,8 @@
     <Compile Include="Report\Data\WarningIND.cs" />
     <Compile Include="Report\Data\WatchIND.cs" />
     <Compile Include="Report\Interface\IReportData.cs" />
-    <Compile Include="Report\Rdlc\Summary.cs" />
-    <Compile Include="Report\Rdlc\Summary.Designer.cs" />
+    <Compile Include="Report\Rdlc\RiskReview.cs" />
+    <Compile Include="Report\Rdlc\RiskReview.Designer.cs" />
     <Compile Include="Report\Rdlc\TestRptDataSet.cs">
       <DependentUpon>TestRptDataSet.xsd</DependentUpon>
     </Compile>
@@ -897,9 +901,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Content Include="Report\Rdlc\Summary.xsc" />
-    <None Include="Report\Rdlc\Summary.xsd" />
-    <Content Include="Report\Rdlc\Summary.xss" />
+    <Content Include="Report\Rdlc\RiskReview.xsc" />
+    <None Include="Report\Rdlc\RiskReview.xsd" />
+    <Content Include="Report\Rdlc\RiskReview.xss" />
     <None Include="Report\Rdlc\TestRptDataSet.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -1112,6 +1116,7 @@
     <Content Include="Views\C0\C10.cshtml" />
     <Content Include="Views\C0\C10Detail.cshtml" />
     <Content Include="Views\D6\D6RiskReview.cshtml" />
+    <Content Include="Views\D6\D6RiskReviewHandle.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1209,6 +1214,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Report\Rdlc\C07Advanced.rdlc" />
+    <EmbeddedResource Include="Report\Rdlc\D62.rdlc" />
+    <EmbeddedResource Include="Report\Rdlc\D63.rdlc" />
+    <EmbeddedResource Include="Report\Rdlc\D64.rdlc" />
     <EmbeddedResource Include="Report\Rdlc\Summary.rdlc" />
   </ItemGroup>
   <PropertyGroup>

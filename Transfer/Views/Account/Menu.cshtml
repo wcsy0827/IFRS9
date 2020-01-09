@@ -15,9 +15,6 @@
     <ul class="sub-menu collapse" id=@item.Menu>
         @foreach (var sub in Model.menu_Sub.Where(x => x.Menu == item.Menu).OrderBy(x => x.SortNum))
         {
-            //Joe:過濾左欄預設 (Display=0) 不顯示的選單欄位
-            if (sub.Display == 0) { continue; }
-
             if (sub.Href.Split(',').Length >= 2)
             {
                 <li id=@sub.Menu_Id>

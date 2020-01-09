@@ -447,15 +447,15 @@ namespace Transfer.Controllers
             return View();
         }
 
-        /// D6RiskReview(風控覆核專區)
+        /// D6RiskReviewHandle(風控覆核專區(經辦))
         /// </summary>
         /// <returns></returns>
         [UserAuth]
-        public ActionResult D6RiskReview()
+        public ActionResult D6RiskReviewHandle()
         {
-            //Joe:取得表單權限
+            //Joe:取得使用者名稱
             string id = System.Web.HttpContext.Current.User.Identity.Name;
-            ViewBag.getHandle = CommonFunction.getUserMenu(id, "D6RiskReviewHandleSub");
+            ViewBag.userName = CommonFunction.getUserName(id);
             return View();
         }
 
@@ -3589,7 +3589,7 @@ namespace Transfer.Controllers
         }
 
         /// <summary>
-        /// Joe:查詢 Bond_Quantitative_Resource :風控經辦
+        /// Joe:查詢 Bond_Quantitative_Resource :風控覆核專區(經辦)
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>

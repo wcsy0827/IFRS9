@@ -2,27 +2,47 @@
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
-    <DataSource Name="TestRptDataSet">
+    <DataSource Name="RiskReview">
       <ConnectionProperties>
         <DataProvider>System.Data.DataSet</DataProvider>
         <ConnectString>/* Local Connection */</ConnectString>
       </ConnectionProperties>
-      <rd:DataSourceID>e301f5db-dd0f-4d91-8830-ff183ad91df3</rd:DataSourceID>
+      <rd:DataSourceID>5504c6d9-c43b-4855-8f38-0c2e2df7a5b5</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="DataSet1">
       <Query>
-        <DataSourceName>TestRptDataSet</DataSourceName>
+        <DataSourceName>RiskReview</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
+        <Field Name="Group_Product_Code">
+          <DataField>Group_Product_Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Group_Product_Name">
+          <DataField>Group_Product_Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Product_Code">
+          <DataField>Product_Code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="Assessment_Sub_Kind">
           <DataField>Assessment_Sub_Kind</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Bond_Type">
-          <DataField>Bond_Type</DataField>
+        <Field Name="Report_Date">
+          <DataField>Report_Date</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Version">
+          <DataField>Version</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Reference_Nbr">
+          <DataField>Reference_Nbr</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Bond_Number">
@@ -37,56 +57,48 @@
           <DataField>Portfolio</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Portfolio_Name">
-          <DataField>Portfolio_Name</DataField>
+        <Field Name="PD">
+          <DataField>PD</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Segment_Name">
-          <DataField>Segment_Name</DataField>
+        <Field Name="LGD">
+          <DataField>LGD</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Origination_Date">
-          <DataField>Origination_Date</DataField>
+        <Field Name="Exposure_EL">
+          <DataField>Exposure_EL</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Cost_Value">
-          <DataField>Cost_Value</DataField>
+        <Field Name="Exposure_Ex">
+          <DataField>Exposure_Ex</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Market_Value_Ori">
-          <DataField>Market_Value_Ori</DataField>
+        <Field Name="Y1_EL">
+          <DataField>Y1_EL</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Value_Change_Ratio">
-          <DataField>Value_Change_Ratio</DataField>
+        <Field Name="Lifetime_EL">
+          <DataField>Lifetime_EL</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Chg_In_Spread">
-          <DataField>Chg_In_Spread</DataField>
+        <Field Name="Y1_EL_Ex">
+          <DataField>Y1_EL_Ex</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Original_External_Rating_Flag">
-          <DataField>Original_External_Rating_Flag</DataField>
+        <Field Name="Lifetime_EL_Ex">
+          <DataField>Lifetime_EL_Ex</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Original_External_Rating">
-          <DataField>Original_External_Rating</DataField>
+        <Field Name="Impairment_Stage">
+          <DataField>Impairment_Stage</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Current_External_Rating">
-          <DataField>Current_External_Rating</DataField>
+        <Field Name="Ex_rate">
+          <DataField>Ex_rate</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Rating_Ori_Good_IND">
-          <DataField>Rating_Ori_Good_IND</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Rating_Curr_Good_Ind">
-          <DataField>Rating_Curr_Good_Ind</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Curr_Ori_Rating_Diff">
-          <DataField>Curr_Ori_Rating_Diff</DataField>
+        <Field Name="Basic_Pass">
+          <DataField>Basic_Pass</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Accumulation_Loss_This_Month">
@@ -97,19 +109,15 @@
           <DataField>Chg_In_Spread_This_Month</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="MapRule">
-          <DataField>MapRule</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="Version">
-          <DataField>Version</DataField>
+        <Field Name="Watch_IND">
+          <DataField>Watch_IND</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
-        <rd:DataSetName>TestRptDataSet</rd:DataSetName>
-        <rd:SchemaPath>D:\fubon\Transfer\Transfer\Report\Rdlc\TestRptDataSet.xsd</rd:SchemaPath>
-        <rd:TableName>TestDataTable</rd:TableName>
+        <rd:DataSetName>RiskReview</rd:DataSetName>
+        <rd:SchemaPath>C:\Users\wistronits\Desktop\_開發_功能_總整理_ver0\_IFRS9-master\Transfer\Report\Rdlc\RiskReview.xsd</rd:SchemaPath>
+        <rd:TableName>C07Advanced</rd:TableName>
         <rd:TableAdapterFillMethod />
         <rd:TableAdapterGetDataMethod />
         <rd:TableAdapterName />
@@ -124,70 +132,76 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.31842cm</Width>
+                  <Width>1.3144cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.23405cm</Width>
+                  <Width>1.31445cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.07938cm</Width>
+                  <Width>1.31445cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.31445cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.31445cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -203,7 +217,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>產業別</Value>
+                                  <Value>產品群組代碼</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -219,7 +233,6 @@
                               <Style>None</Style>
                             </Border>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Double</Style>
                               <Width>3pt</Width>
                             </BottomBorder>
@@ -240,7 +253,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>債券種類</Value>
+                                  <Value>產品群組名稱</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -256,7 +269,6 @@
                               <Style>None</Style>
                             </Border>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Double</Style>
                               <Width>3pt</Width>
                             </BottomBorder>
@@ -277,7 +289,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>債券編號</Value>
+                                  <Value>產品</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -293,7 +305,6 @@
                               <Style>None</Style>
                             </Border>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Double</Style>
                               <Width>3pt</Width>
                             </BottomBorder>
@@ -314,7 +325,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Lots</Value>
+                                  <Value>評估次分類</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -330,7 +341,6 @@
                               <Style>None</Style>
                             </Border>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Double</Style>
                               <Width>3pt</Width>
                             </BottomBorder>
@@ -351,7 +361,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Portfolio_英文</Value>
+                                  <Value>報導日</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -367,7 +377,6 @@
                               <Style>None</Style>
                             </Border>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Double</Style>
                               <Width>3pt</Width>
                             </BottomBorder>
@@ -388,7 +397,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Portfolio_中文</Value>
+                                  <Value>版本</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -404,7 +413,6 @@
                               <Style>None</Style>
                             </Border>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Double</Style>
                               <Width>3pt</Width>
                             </BottomBorder>
@@ -425,7 +433,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>債券(資產)名稱</Value>
+                                  <Value>帳戶編號</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -441,7 +449,6 @@
                               <Style>None</Style>
                             </Border>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Double</Style>
                               <Width>3pt</Width>
                             </BottomBorder>
@@ -462,7 +469,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>債券購入(認列)日期</Value>
+                                  <Value>債券編號</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -499,7 +506,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>攤銷後之成本數(原幣)</Value>
+                                  <Value>Lots</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -536,7 +543,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>市價(原幣)</Value>
+                                  <Value>Portfolio</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -573,7 +580,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>未實現累計損失率_本月</Value>
+                                  <Value>第一年違約機率</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -610,7 +617,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>信用利差_本月</Value>
+                                  <Value>LGD</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -647,7 +654,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>是否有購買日信評</Value>
+                                  <Value>曝險額(原幣)</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -684,7 +691,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>購買日信評(主標尺轉換值)</Value>
+                                  <Value>曝險額(台幣)</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -721,7 +728,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>報導日信評(主標尺轉換值)</Value>
+                                  <Value>一年期預期信用損失(原幣)</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -758,7 +765,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>原始購買信評是否為低信用風險等級</Value>
+                                  <Value>存續期間預期信用損失(原幣)</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -795,7 +802,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>報導日信評是否為低信用風險等級</Value>
+                                  <Value>一年期預期信用損失(台幣)</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -832,7 +839,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>評等下降數</Value>
+                                  <Value>存續期間預期信用損失(台幣)</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -869,7 +876,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>未實現累計損失率逾越30%(含)連續月數</Value>
+                                  <Value>預設STAGE</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -906,7 +913,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>信用利差拓寬300基點(含)以上連續月數</Value>
+                                  <Value>基準日匯率</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -943,7 +950,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>對應規則參數編號</Value>
+                                  <Value>基本要件通過與否</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -973,14 +980,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox70">
+                        <Textbox Name="Textbox5">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Version</Value>
+                                  <Value>未實現累計損失月數_本月狀況</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -990,7 +997,81 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox70</rd:DefaultName>
+                          <rd:DefaultName>Textbox5</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Double</Style>
+                              <Width>3pt</Width>
+                            </BottomBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox11">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>信用利差目前累計逾越月數</Value>
+                                  <Style>
+                                    <FontFamily>新細明體</FontFamily>
+                                    <FontSize>6pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox11</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Double</Style>
+                              <Width>3pt</Width>
+                            </BottomBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox13">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>是否為觀察名單</Value>
+                                  <Style>
+                                    <FontFamily>新細明體</FontFamily>
+                                    <FontSize>6pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox13</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -1015,6 +1096,138 @@
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="Group_Product_Code">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Group_Product_Code.Value</Value>
+                                  <Style>
+                                    <FontFamily>新細明體</FontFamily>
+                                    <FontSize>6pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Group_Product_Code</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>Dashed</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Group_Product_Name">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Group_Product_Name.Value</Value>
+                                  <Style>
+                                    <FontFamily>新細明體</FontFamily>
+                                    <FontSize>6pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Group_Product_Name</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>Dashed</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Product_Code">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Product_Code.Value</Value>
+                                  <Style>
+                                    <FontFamily>新細明體</FontFamily>
+                                    <FontSize>6pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Product_Code</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>Dashed</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="Assessment_Sub_Kind">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -1037,11 +1250,18 @@
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Dashed</Style>
-                              <Width>1pt</Width>
                             </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1052,14 +1272,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Bond_Type">
+                        <Textbox Name="Report_Date">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Bond_Type.Value</Value>
+                                  <Value>=Fields!Report_Date.Value</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -1069,16 +1289,111 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Bond_Type</rd:DefaultName>
+                          <rd:DefaultName>Report_Date</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Dashed</Style>
-                              <Width>1pt</Width>
                             </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Version1">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Version.Value</Value>
+                                  <Style>
+                                    <FontFamily>新細明體</FontFamily>
+                                    <FontSize>6pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Version1</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>Dashed</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Reference_Nbr">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Reference_Nbr.Value</Value>
+                                  <Style>
+                                    <FontFamily>新細明體</FontFamily>
+                                    <FontSize>6pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Reference_Nbr</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>Dashed</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1111,11 +1426,18 @@
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Dashed</Style>
-                              <Width>1pt</Width>
                             </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1137,6 +1459,7 @@
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
+                                    <Format>#,0.00</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1148,11 +1471,18 @@
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Dashed</Style>
-                              <Width>1pt</Width>
                             </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1163,44 +1493,7 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Portfolio_Name">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Portfolio_Name.Value</Value>
-                                  <Style>
-                                    <FontFamily>新細明體</FontFamily>
-                                    <FontSize>6pt</FontSize>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Portfolio_Name</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Dashed</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Portfolio1">
+                        <Textbox Name="Portfolio">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -1211,117 +1504,6 @@
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Portfolio1</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Dashed</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Segment_Name">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Segment_Name.Value</Value>
-                                  <Style>
-                                    <FontFamily>新細明體</FontFamily>
-                                    <FontSize>6pt</FontSize>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Segment_Name</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Dashed</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Origination_Date">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Origination_Date.Value</Value>
-                                  <Style>
-                                    <FontFamily>新細明體</FontFamily>
-                                    <FontSize>6pt</FontSize>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Origination_Date</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Dashed</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Cost_Value">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Cost_Value.Value</Value>
-                                  <Style>
-                                    <FontFamily>新細明體</FontFamily>
-                                    <FontSize>6pt</FontSize>
                                     <Format>#,0.00</Format>
                                   </Style>
                                 </TextRun>
@@ -1329,16 +1511,23 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Cost_Value</rd:DefaultName>
+                          <rd:DefaultName>Portfolio</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Dashed</Style>
-                              <Width>1pt</Width>
                             </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1349,34 +1538,40 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Market_Value_Ori">
+                        <Textbox Name="PD">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Market_Value_Ori.Value</Value>
+                                  <Value>=Fields!PD.Value</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
-                                    <Format>#,0.00</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Market_Value_Ori</rd:DefaultName>
+                          <rd:DefaultName>PD</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Dashed</Style>
-                              <Width>1pt</Width>
                             </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1387,14 +1582,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Value_Change_Ratio">
+                        <Textbox Name="LGD">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Value_Change_Ratio.Value</Value>
+                                  <Value>=Fields!LGD.Value</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -1404,16 +1599,23 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Value_Change_Ratio</rd:DefaultName>
+                          <rd:DefaultName>LGD</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Dashed</Style>
-                              <Width>1pt</Width>
                             </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1424,14 +1626,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Chg_In_Spread">
+                        <Textbox Name="Exposure_EL">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Chg_In_Spread.Value</Value>
+                                  <Value>=Fields!Exposure_EL.Value</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -1441,16 +1643,23 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Chg_In_Spread</rd:DefaultName>
+                          <rd:DefaultName>Exposure_EL</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Dashed</Style>
-                              <Width>1pt</Width>
                             </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1461,14 +1670,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Original_External_Rating_Flag">
+                        <Textbox Name="Exposure_Ex">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Original_External_Rating_Flag.Value</Value>
+                                  <Value>=Fields!Exposure_Ex.Value</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -1478,16 +1687,23 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Original_External_Rating_Flag</rd:DefaultName>
+                          <rd:DefaultName>Exposure_Ex</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Dashed</Style>
-                              <Width>1pt</Width>
                             </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1498,14 +1714,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Original_External_Rating">
+                        <Textbox Name="Y1_EL">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Original_External_Rating.Value</Value>
+                                  <Value>=Fields!Y1_EL.Value</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -1515,16 +1731,23 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Original_External_Rating</rd:DefaultName>
+                          <rd:DefaultName>Y1_EL</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Dashed</Style>
-                              <Width>1pt</Width>
                             </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1535,14 +1758,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Current_External_Rating">
+                        <Textbox Name="Lifetime_EL">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Current_External_Rating.Value</Value>
+                                  <Value>=Fields!Lifetime_EL.Value</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -1552,16 +1775,23 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Current_External_Rating</rd:DefaultName>
+                          <rd:DefaultName>Lifetime_EL</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Dashed</Style>
-                              <Width>1pt</Width>
                             </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1572,14 +1802,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Rating_Ori_Good_IND">
+                        <Textbox Name="Y1_EL_Ex">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Rating_Ori_Good_IND.Value</Value>
+                                  <Value>=Fields!Y1_EL_Ex.Value</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -1589,16 +1819,23 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Rating_Ori_Good_IND</rd:DefaultName>
+                          <rd:DefaultName>Y1_EL_Ex</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Dashed</Style>
-                              <Width>1pt</Width>
                             </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1609,14 +1846,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Rating_Curr_Good_Ind">
+                        <Textbox Name="Lifetime_EL_Ex">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Rating_Curr_Good_Ind.Value</Value>
+                                  <Value>=Fields!Lifetime_EL_Ex.Value</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -1626,16 +1863,23 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Rating_Curr_Good_Ind</rd:DefaultName>
+                          <rd:DefaultName>Lifetime_EL_Ex</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Dashed</Style>
-                              <Width>1pt</Width>
                             </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1646,14 +1890,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Curr_Ori_Rating_Diff">
+                        <Textbox Name="Impairment_Stage">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Curr_Ori_Rating_Diff.Value</Value>
+                                  <Value>=Fields!Impairment_Stage.Value</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -1663,16 +1907,111 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Curr_Ori_Rating_Diff</rd:DefaultName>
+                          <rd:DefaultName>Impairment_Stage</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Dashed</Style>
-                              <Width>1pt</Width>
                             </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Ex_rate">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Ex_rate.Value</Value>
+                                  <Style>
+                                    <FontFamily>新細明體</FontFamily>
+                                    <FontSize>6pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Ex_rate</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>Dashed</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Basic_Pass">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Basic_Pass.Value</Value>
+                                  <Style>
+                                    <FontFamily>新細明體</FontFamily>
+                                    <FontSize>6pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Basic_Pass</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>Dashed</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1705,11 +2044,18 @@
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Dashed</Style>
-                              <Width>1pt</Width>
                             </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1742,11 +2088,18 @@
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Dashed</Style>
-                              <Width>1pt</Width>
                             </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1757,14 +2110,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="MapRule">
+                        <Textbox Name="Watch_IND">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!MapRule.Value</Value>
+                                  <Value>=Fields!Watch_IND.Value</Value>
                                   <Style>
                                     <FontFamily>新細明體</FontFamily>
                                     <FontSize>6pt</FontSize>
@@ -1774,53 +2127,23 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>MapRule</rd:DefaultName>
+                          <rd:DefaultName>Watch_IND</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <BottomBorder>
-                              <Color>Black</Color>
                               <Style>Dashed</Style>
-                              <Width>1pt</Width>
                             </BottomBorder>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Version">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Version.Value</Value>
-                                  <Style>
-                                    <FontFamily>新細明體</FontFamily>
-                                    <FontSize>6pt</FontSize>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Version</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Dashed</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1856,11 +2179,9 @@
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
-                <TablixMember>
-                  <Visibility>
-                    <Hidden>true</Hidden>
-                  </Visibility>
-                </TablixMember>
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -1880,7 +2201,7 @@
             <DataSetName>DataSet1</DataSetName>
             <Left>0.25cm</Left>
             <Height>1.2cm</Height>
-            <Width>27.68183cm</Width>
+            <Width>31.5458cm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2158,13 +2479,13 @@
             </Style>
           </Textbox>
         </ReportItems>
-        <Height>4.82479cm</Height>
+        <Height>4.80771cm</Height>
         <Style />
       </Body>
-      <Width>27.93183cm</Width>
+      <Width>31.84365cm</Width>
       <Page>
         <PageHeader>
-          <Height>3.4132cm</Height>
+          <Height>3.62478cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -2229,123 +2550,7 @@
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
-            <Textbox Name="textbox2224">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>報表代號：</Value>
-                      <Style>
-                        <FontFamily>細明體</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=Parameters!Name.Value</Value>
-                      <Style>
-                        <FontFamily>細明體</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Left</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <Top>1.30186cm</Top>
-              <Left>22.66314cm</Left>
-              <Height>0.4cm</Height>
-              <Width>5.18931cm</Width>
-              <ZIndex>2</ZIndex>
-              <Style>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
             <Textbox Name="textbox57">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>列印日期：</Value>
-                      <Style>
-                        <FontFamily>細明體</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=Year(Globals!ExecutionTime) - 1911 &amp; "/" &amp; Format(Globals!ExecutionTime, "MM/dd")</Value>
-                      <Style>
-                        <FontFamily>細明體</FontFamily>
-                        <FontSize>8pt</FontSize>
-                        <Format>yyyy/MM/dd</Format>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Left</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <Top>1.72425cm</Top>
-              <Left>22.66314cm</Left>
-              <Height>0.4cm</Height>
-              <Width>5.18931cm</Width>
-              <ZIndex>3</ZIndex>
-              <Style>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="textbox58">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>列印時間：</Value>
-                      <Style>
-                        <FontFamily>細明體</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=TimeString</Value>
-                      <Style>
-                        <FontFamily>細明體</FontFamily>
-                        <FontSize>8pt</FontSize>
-                        <Format>hh:mm</Format>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Left</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <Top>2.14663cm</Top>
-              <Left>22.66314cm</Left>
-              <Height>0.4cm</Height>
-              <Width>5.18931cm</Width>
-              <ZIndex>4</ZIndex>
-              <Style>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="textbox59">
               <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
               <Paragraphs>
@@ -2371,11 +2576,11 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>2.14663cm</Top>
+              <Top>2.25977cm</Top>
               <Left>0.25cm</Left>
               <Height>0.4cm</Height>
-              <Width>6.5921cm</Width>
-              <ZIndex>5</ZIndex>
+              <Width>7.8864cm</Width>
+              <ZIndex>2</ZIndex>
               <Style>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
@@ -2409,11 +2614,11 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>1.72425cm</Top>
+              <Top>1.83739cm</Top>
               <Left>0.25cm</Left>
               <Height>0.4cm</Height>
-              <Width>6.5921cm</Width>
-              <ZIndex>6</ZIndex>
+              <Width>7.8864cm</Width>
+              <ZIndex>3</ZIndex>
               <Style>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
@@ -2447,11 +2652,11 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>1.30185cm</Top>
+              <Top>1.41499cm</Top>
               <Left>0.25cm</Left>
               <Height>0.4cm</Height>
-              <Width>6.5921cm</Width>
-              <ZIndex>7</ZIndex>
+              <Width>7.8864cm</Width>
+              <ZIndex>4</ZIndex>
               <Style>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
@@ -2459,7 +2664,7 @@
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
-            <Textbox Name="textbox60">
+            <Textbox Name="textbox58">
               <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
               <Paragraphs>
@@ -2485,10 +2690,126 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>2.58191cm</Top>
+              <Top>2.69505cm</Top>
               <Left>0.25cm</Left>
               <Height>0.4cm</Height>
-              <Width>6.5921cm</Width>
+              <Width>7.8864cm</Width>
+              <ZIndex>5</ZIndex>
+              <Style>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="textbox2224">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>報表代號：</Value>
+                      <Style>
+                        <FontFamily>細明體</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Parameters!Name.Value</Value>
+                      <Style>
+                        <FontFamily>細明體</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Left</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <Top>1.415cm</Top>
+              <Left>22.5948cm</Left>
+              <Height>0.4cm</Height>
+              <Width>5.25765cm</Width>
+              <ZIndex>6</ZIndex>
+              <Style>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="textbox59">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>列印日期：</Value>
+                      <Style>
+                        <FontFamily>細明體</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Year(Globals!ExecutionTime) - 1911 &amp; "/" &amp; Format(Globals!ExecutionTime, "MM/dd")</Value>
+                      <Style>
+                        <FontFamily>細明體</FontFamily>
+                        <FontSize>8pt</FontSize>
+                        <Format>yyyy/MM/dd</Format>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Left</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <Top>1.83739cm</Top>
+              <Left>22.5948cm</Left>
+              <Height>0.4cm</Height>
+              <Width>5.25765cm</Width>
+              <ZIndex>7</ZIndex>
+              <Style>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="textbox60">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>列印時間：</Value>
+                      <Style>
+                        <FontFamily>細明體</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=TimeString</Value>
+                      <Style>
+                        <FontFamily>細明體</FontFamily>
+                        <FontSize>8pt</FontSize>
+                        <Format>hh:mm</Format>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Left</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <Top>2.25977cm</Top>
+              <Left>22.5948cm</Left>
+              <Height>0.4cm</Height>
+              <Width>5.25765cm</Width>
               <ZIndex>8</ZIndex>
               <Style>
                 <PaddingLeft>2pt</PaddingLeft>
@@ -2509,8 +2830,8 @@
         <InteractiveHeight>15cm</InteractiveHeight>
         <InteractiveWidth>29.7cm</InteractiveWidth>
         <LeftMargin>0.5cm</LeftMargin>
-        <RightMargin>0cm</RightMargin>
-        <TopMargin>0cm</TopMargin>
+        <RightMargin>0.5cm</RightMargin>
+        <TopMargin>0.5cm</TopMargin>
         <BottomMargin>0.5cm</BottomMargin>
         <ColumnSpacing>0.13cm</ColumnSpacing>
         <Style />
@@ -2518,11 +2839,19 @@
     </ReportSection>
   </ReportSections>
   <ReportParameters>
+    <ReportParameter Name="Title">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Format">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
     <ReportParameter Name="ReportTitle">
       <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="Title">
+    <ReportParameter Name="ReportDate">
       <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
@@ -2530,26 +2859,12 @@
       <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="Name">
-      <DataType>String</DataType>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ReportDate">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
     <ReportParameter Name="Version">
       <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="Format">
+    <ReportParameter Name="Name">
       <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="Handle">
@@ -2597,27 +2912,27 @@
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>0</RowIndex>
-          <ParameterName>ReportTitle</ParameterName>
+          <ParameterName>Title</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
           <RowIndex>0</RowIndex>
-          <ParameterName>Title</ParameterName>
+          <ParameterName>Format</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>1</RowIndex>
-          <ParameterName>Emp</ParameterName>
+          <ParameterName>ReportTitle</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
           <RowIndex>1</RowIndex>
-          <ParameterName>Name</ParameterName>
+          <ParameterName>ReportDate</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>2</RowIndex>
-          <ParameterName>ReportDate</ParameterName>
+          <ParameterName>Emp</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
@@ -2627,7 +2942,7 @@
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>3</RowIndex>
-          <ParameterName>Format</ParameterName>
+          <ParameterName>Name</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
