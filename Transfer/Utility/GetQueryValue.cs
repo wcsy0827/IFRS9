@@ -49,4 +49,48 @@ namespace Transfer.Utility
             return "規則編號:" + RuleID + "(" + RuleDesc + "):" + NumberPen + "筆";
         }
     }
+
+    public class BondRiskReviewResult
+    {
+        public string Reference_Nbr { get; set; }
+        public string Create_User { get; set; }
+        public string First_Order_User { get; set; }
+        public string Second_Order_User { get; set; }
+        public string D62Handle { get; set; }
+        public string D62HandleOpinion { get; set; }
+        public string D63_D64Handle { get; set; }
+        public string D63_D64HandleOpinion { get; set; }
+        public string SummaryHandle { get; set; }
+        public string SummaryHandleOpinion { get; set; }
+        public string WatchINDHandle { get; set; }
+        public string WatchINDHandleOpinion { get; set; }
+        public string WarningINDHandle { get; set; }
+        public string WarningINDHandleOpinion { get; set; }
+        public string C07AdvancedHandle { get; set; }
+        public string C07AdvancedHandleOpinion { get; set; }
+        public string D62ReviewOne { get; set; }
+        public string D62ReviewOpinionOne { get; set; }
+        public string D63_D64ReviewOne { get; set; }
+        public string D63_D64ReviewOpinionOne { get; set; }
+        public string SummaryReviewOne { get; set; }
+        public string SummaryReviewOpinionOne { get; set; }
+        public string WatchINDReviewOne { get; set; }
+        public string WatchINDReviewOpinionOne { get; set; }
+        public string WarningINDReviewOne { get; set; }
+        public string WarningINDReviewOpinionOne { get; set; }
+        public string C07AdvancedReviewOne { get; set; }
+        public string C07AdvancedReviewOpinionOne { get; set; }
+        public string D62ReviewTwo { get; set; }
+        public string D62ReviewOpinionTwo { get; set; }
+        public string D63_D64ReviewTwo { get; set; }
+        public string D63_D64ReviewOpinionTwo { get; set; }
+        public string SummaryReviewTwo { get; set; }
+        public string SummaryReviewOpinionTwo { get; set; }
+        public string WatchINDReviewTwo { get; set; }
+        public string WatchINDReviewOpinionTwo { get; set; }
+        public string WarningINDReviewTwo { get; set; }
+        public string WarningINDReviewOpinionTwo { get; set; }
+        public string C07AdvancedReviewTwo { get; set; }
+        public string C07AdvancedReviewOpinionTwo { get; set; }
+    }
 }

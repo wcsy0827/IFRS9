@@ -37,10 +37,12 @@
     }
 
     //Joe:Select 連動顯示
-    customerUtility.getData = function (selectId, data, url, event) {
+    customerUtility.getData = function (selectId, data, url, event, isNum) {
         var isArray = [].concat(selectId || []);
-        for (var i = 0; i <= isArray.length; i++) {
+        for (var i = 0; i < isArray.length; i++) {
             $("#" + isArray[i] + " option").remove();
+            if (isNum == "") { return; }
+            if (isArray[i] == "version") { $("#" + isArray[i]).append(new Option("", "")); }
         }
         $.ajax({
             type: "POST",
@@ -58,11 +60,11 @@
                     $.each(result.Datas.Data, function (key, value) {
                         optionObj.push({ value: value, text: value });
                     })
-                    var isArray = [].concat(selectId || []);
+                    isArray = [].concat(selectId || []);
                     for (var i = 0; i <= isArray.length; i++) {
                         customerUtility.addoption(isArray[i], optionObj);
                     }
-                    var isArray = [].concat(event || []);
+                    isArray = [].concat(event || []);
                     for (var i = 0; i <= isArray.length; i++) {
                         if (typeof isArray[i] == 'function') {
                             isArray[i]();

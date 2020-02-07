@@ -15,6 +15,7 @@ namespace Transfer.Utility
             FileDownloads = "FileDownloads"; //下載檔案放置位置
             QuantifyFile = "QuantifyFile"; //D64 Quantify檔案放置位置
             QualitativeFile = "QualitativeFile"; //D66 Qualitative檔案放置位置
+            RiskReviewFile = "RiskReviewFile"; //D6 RiskReviewFile檔案放置位置
             A41TransferTxtLog = @"DataRequirementsTransfer.txt"; //A41上傳Txtlog檔名
             A42TransferTxtLog = @"A42Transfer.txt"; //A42上傳Txtlog檔名
             A45TransferTxtLog = @"A45Transfer.txt"; //A45上傳Txtlog檔名
@@ -55,6 +56,7 @@ namespace Transfer.Utility
         public static string FileUploads { get; private set; }
         public static string QuantifyFile { get; private set; }
         public static string QualitativeFile { get; private set; }
+        public static string RiskReviewFile { get; private set; }
         public static string ProgramName { get; private set; }
         public static string C01TransferTxtLog { get; private set; }
         public static string C10TransferTxtLog { get; private set; }

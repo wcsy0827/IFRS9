@@ -259,7 +259,7 @@ namespace Transfer.Models.Interface
         #region 評估相關
 
         /// <summary>
-        /// 刪除D64orD66附件檔案
+        /// 刪除D64orD66orD6RiskReview附件檔案
         /// </summary>
         /// <param name="type"></param>
         /// <param name="Check_Reference"></param>
@@ -280,6 +280,13 @@ namespace Transfer.Models.Interface
         /// <param name="Check_Reference"></param>
         /// <returns></returns>
         List<Bond_Qualitative_Assessment_Result_File> getQualitativeFile(string Check_Reference);
+
+        /// <summary>
+        ///  get D6RiskReviewFile fileName
+        /// </summary>
+        /// <param name="Check_Reference"></param>
+        /// <returns></returns>
+        List<Bond_RiskReview_Result_File> getD6RiskReviewFile(string Check_Reference);
 
         /// <summary>
         /// save QualitativeFile
@@ -394,12 +401,27 @@ namespace Transfer.Models.Interface
         List<VersionInfo> getD6Version(DateTime dt);
 
         /// <summary>
-        /// Joe:查詢 Bond_Quantitative_Result :覆核狀態
+        /// Joe:查詢 Bond_Quantitative_Resource :版本
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        List<string> getD6RiskReviewVersion(DateTime dt);
+
+        /// <summary>
+        /// Joe:查詢 Version_Info :版本內容
         /// </summary>
         /// <param name="dt"></param>
         /// <param name="num"></param>
         /// <returns></returns>
-        List<StatusInfo> getD6Status(DateTime dt, int num);
+        List<string> getD6RiskReviewContent(DateTime dt, int num);
+
+        /// <summary>
+        /// Joe:查詢 Bond_Quantitative_Resource :覆核狀態
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        List<StatusInfo> getD6RiskReviewStatus(DateTime dt, int num);
 
         /// <summary>
         /// Joe:查詢 Flow_Apply_Status :產品
@@ -407,14 +429,48 @@ namespace Transfer.Models.Interface
         /// <param name="dt"></param>
         /// <param name="num"></param>
         /// <returns></returns>
-        List<GroupProduct> getD6Product(DateTime dt, int num);
+        List<GroupProduct> getD6RiskReviewProduct(DateTime dt, int num);
 
         /// <summary>
         /// Joe:查詢 Bond_Quantitative_Resource :風控覆核專區(經辦)
         /// </summary>
         /// <param name="dt"></param>
         /// <param name="num"></param>
+        /// <param name="status"></param>
         /// <returns></returns>
-        List<string> getD6Handle(DateTime dt, int num);
+        List<BondRiskReviewResult> getD6RiskReviewHandle(DateTime dt, int num, int status);
+
+        /// <summary>
+        /// Joe:查詢 Bond_RiskReview_Result :風控覆核專區(覆核)
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="num"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        List<BondRiskReviewResult> getD6RiskReviewReview(DateTime dt, int num, int status);
+
+        /// <summary>
+        /// Joe:查詢 FRS9_User :風控覆核專區(覆核者確認)
+        /// </summary>
+        List<Tuple<string, string>> getUserAccount();
+
+        /// <summary>
+        /// Joe:更新 Bond_Quantitative_Resource :風控狀態
+        /// Joe:新增 Version_Info :版本資訊
+        /// Joe:新增 Bond_RiskReview_Result :風控覆核專區
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        MSGReturnModel submitD6Review(Dictionary<string, string> data);
+
+        /// <summary>
+        /// Joe:更新 Version_Info :版本內容
+        /// Joe:更新 Bond_RiskReview_Result :銷案
+        /// Joe:更新 Bond_Quantitative_Resource :風控狀態
+        /// Joe:更新 Bond_RiskReview_Result_File :狀態
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        MSGReturnModel closeD6Review(Dictionary<string, string> data);
     }
 }

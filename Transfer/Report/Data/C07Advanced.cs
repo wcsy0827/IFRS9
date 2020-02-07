@@ -52,7 +52,7 @@ namespace Transfer.Report.Data
                 foreach (XElement element in rdlcXml.Descendants(xmlns + "Field"))
                 {
                     string Field = element.FirstAttribute.Value;
-                    sql += "'NULL' AS " + Field + ",\n";
+                    sql += "'' AS " + Field + ",\n";
                 }
             }
             sql = sql.Trim().Trim(',');

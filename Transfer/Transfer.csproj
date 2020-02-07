@@ -648,6 +648,7 @@
     <Compile Include="Report\Data\Impairment02.cs" />
     <Compile Include="Report\Data\ReportData.cs" />
     <Compile Include="Report\Data\Impairment01.cs" />
+    <Compile Include="Report\Data\Signing.cs" />
     <Compile Include="Report\Data\Summary.cs" />
     <Compile Include="Report\Data\WarningIND.cs" />
     <Compile Include="Report\Data\WatchIND.cs" />
@@ -1218,6 +1219,7 @@
     <EmbeddedResource Include="Report\Rdlc\D62.rdlc" />
     <EmbeddedResource Include="Report\Rdlc\D63.rdlc" />
     <EmbeddedResource Include="Report\Rdlc\D64.rdlc" />
+    <EmbeddedResource Include="Report\Rdlc\Signing.rdlc" />
     <EmbeddedResource Include="Report\Rdlc\Summary.rdlc" />
   </ItemGroup>
   <PropertyGroup>

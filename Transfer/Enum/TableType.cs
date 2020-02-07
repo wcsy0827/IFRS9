@@ -242,7 +242,7 @@ namespace Transfer.Enum
             [Description("Bond_Spread_Trade_Info")]
             [Name("信用利差最後交易日資料")]
             A96_Trade,
-            
+
             /// <summary>
             /// 帳戶主檔
             /// </summary>
@@ -370,6 +370,13 @@ namespace Transfer.Enum
             [Description("Bond_Qualitative_Assessment_Result")]
             [Name("質化評估結果檔")]
             D66,
+
+            /// <summary>
+            /// 風控覆核專區
+            /// </summary>
+            [Description("Bond_RiskReview_Result_File")]
+            [Name("風控覆核專區")]
+            D6RiskReview,
 
             /// <summary>
             /// SMF分群設定檔

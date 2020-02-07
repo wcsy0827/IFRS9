@@ -9,6 +9,7 @@ using Transfer.ViewModels;
 using System.Linq;
 using static Transfer.Enum.Ref;
 using System.IO;
+using Transfer.Models;
 
 namespace Transfer.Controllers
 {
@@ -453,9 +454,13 @@ namespace Transfer.Controllers
         [UserAuth]
         public ActionResult D6RiskReviewHandle()
         {
-            //Joe:取得使用者名稱
+            //Joe:取得使用者ID/名稱
             string id = System.Web.HttpContext.Current.User.Identity.Name;
+            ViewBag.userID = id;
             ViewBag.userName = CommonFunction.getUserName(id);
+            ViewBag.userAccount = new SelectList(
+                D6Repository.getUserAccount()
+                .Select(x => new { Text = x.Item2, Value = x.Item1 }), "Value", "Text");
             return View();
         }
 
@@ -1864,7 +1869,7 @@ namespace Transfer.Controllers
 
                 #endregion 前端無傳送檔案進來
 
-                var FileModel = Request.Files["UploadedFile"];
+                System.Web.HttpPostedFileBase FileModel = Request.Files["UploadedFile"];
                 string Check_Reference = Request.Form["Check_Reference"];
                 string sameFlag = Request.Form["sameFlag"];
                 string type = Request.Form["type"];
@@ -1890,7 +1895,6 @@ namespace Transfer.Controllers
 
                 #region 上傳檔案
 
-
                 #region 檢查是否有FileUploads資料夾,如果沒有就新增 並加入 excel 檔案
 
                 Table_Type _type = Table_Type.D64;
@@ -1905,6 +1909,11 @@ namespace Transfer.Controllers
                     _type = Table_Type.D66;
                     projectFile = Server.MapPath("~/" + SetFile.QualitativeFile); //D66專案資料夾
                 }
+                else if (type == "D6RiskReview")
+                {
+                    _type = Table_Type.D6RiskReview;
+                    projectFile = Server.MapPath("~/" + SetFile.RiskReviewFile); //D6RiskReview專案資料夾
+                }
 
                 FileRelated.createFile(projectFile); //檢查是否有資料夾,如果沒有就新增
 
@@ -1912,7 +1921,6 @@ namespace Transfer.Controllers
                 FileRelated.createFile(projectFileSub); //檢查是否有Check_Reference資料夾,如果沒有就新增
 
                 string path = Path.Combine(projectFileSub, fileName);
-
 
                 //呼叫上傳檔案 function
                 result = FileRelated.FileUpLoadinPath(path, FileModel);
@@ -1930,6 +1938,8 @@ namespace Transfer.Controllers
                         result.Datas = Json(D6Repository.getQuantifyFile(Check_Reference));
                     if (type == "D66")
                         result.Datas = Json(D6Repository.getQualitativeFile(Check_Reference));
+                    if (type == "D6RiskReview")
+                        result.Datas = Json(D6Repository.getD6RiskReviewFile(Check_Reference));
                 }
                 #endregion 上傳檔案
             }
@@ -1964,6 +1974,23 @@ namespace Transfer.Controllers
                 result.DESCRIPTION = Message_Type.not_Find_Any.GetDescription();
             else
                 result.Datas = Json(data);
+            return Json(result);
+        }
+
+        [HttpPost]
+        public JsonResult GetD6RiskReviewFile(string Check_Reference)
+        {
+            MSGReturnModel result = new MSGReturnModel();
+            List<Bond_RiskReview_Result_File> data = D6Repository.getD6RiskReviewFile(Check_Reference);
+            result.RETURN_FLAG = data.Any();
+            if (!result.RETURN_FLAG)
+            {
+                result.DESCRIPTION = Message_Type.not_Find_Any.GetDescription();
+            }
+            else
+            {
+                result.Datas = Json(data);
+            }
             return Json(result);
         }
 
@@ -2003,15 +2030,29 @@ namespace Transfer.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult DLRiskReviewFile(string Check_Reference, string fileName)
+        {
+            try
+            {
+                string path = Path.Combine(Path.Combine(Server.MapPath("~/" + SetFile.RiskReviewFile), Check_Reference), fileName);
+                return System.IO.File.Exists(path) ? File(path, System.Net.Mime.MediaTypeNames.Application.Octet, fileName) : (ActionResult)Content("檔案已遺失!");
+            }
+            catch (Exception ex)
+            {
+                return Content(ex.exceptionMessage());
+            }
+        }
+
         #region DelFile
         /// <summary>
-        /// 刪除D64orD66附件檔案
+        /// 刪除D64orD66orD6RiskReview附件檔案
         /// </summary>
-        /// <param name="type">D64 or D66</param>
+        /// <param name="type">D64 or D66 or D6RiskReview</param>
         /// <param name="Check_Reference">Check_Reference</param>
         /// <param name="fileName">File_Name</param>
         /// <returns></returns>
-        [BrowserEvent("刪除D64orD66附件檔案")]
+        [BrowserEvent("刪除D64orD66orD6RiskReview附件檔案")]
         [HttpPost]
         public JsonResult DelFile(
             string type,
@@ -2028,6 +2069,8 @@ namespace Transfer.Controllers
                     result.Datas = Json(D6Repository.getQuantifyFile(Check_Reference));
                 if (type == "D66")
                     result.Datas = Json(D6Repository.getQualitativeFile(Check_Reference));
+                if (type == "D6RiskReview")
+                    result.Datas = Json(D6Repository.getD6RiskReviewFile(Check_Reference));
             }
             return Json(result);
         }
@@ -3529,31 +3572,78 @@ namespace Transfer.Controllers
         }
 
         /// <summary>
-        /// Joe:查詢 Bond_Quantitative_Result :覆核狀態
+        /// Joe:查詢 Bond_Quantitative_Resource :版本
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public JsonResult GetD6Status(string[] data)
+        public JsonResult GetD6RiskReviewVersion(string data)
         {
             MSGReturnModel result = new MSGReturnModel();
-            List<string> listContent = new List<string>();
-            List<StatusInfo> listData = new List<StatusInfo>();
+            List<string> version = new List<string>();
+            DateTime reportDate = DateTime.Parse(data);
+
+            result.RETURN_FLAG = false;
+            result.DESCRIPTION = "版本 : " + Message_Type.not_Find_Data.GetDescription();
+            version = D6Repository.getD6RiskReviewVersion(reportDate);
+
+            if (version.Any())
+            {
+                result.RETURN_FLAG = true;
+                result.Datas = Json(version);
+            }
+            return Json(result);
+        }
+
+        /// <summary>
+        /// Joe:查詢 Version_Info :版本內容
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public JsonResult GetD6RiskReviewContent(string[] data)
+        {
+            MSGReturnModel result = new MSGReturnModel();
+            List<string> content = new List<string>();
+            DateTime reportDate = DateTime.Parse(data[0]);
+            int version = Convert.ToInt32(data[1]);
+
+            result.RETURN_FLAG = false;
+            result.DESCRIPTION = "版本內容 : " + Message_Type.not_Find_Data.GetDescription();
+            content = D6Repository.getD6RiskReviewContent(reportDate, version);
+
+            if (content.Any())
+            {
+                result.RETURN_FLAG = true;
+                result.Datas = Json(content);
+            }
+            return Json(result);
+        }
+
+        /// <summary>
+        /// Joe:查詢 Bond_Quantitative_Resource :覆核狀態
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public JsonResult GetD6RiskReviewStatus(string[] data)
+        {
+            MSGReturnModel result = new MSGReturnModel();
+            List<string> status = new List<string>();
+            List<StatusInfo> statusData = new List<StatusInfo>();
             DateTime reportDate = DateTime.Parse(data[0]);
             int version = Convert.ToInt32(data[1]);
 
             result.RETURN_FLAG = false;
             result.DESCRIPTION = "覆核狀態 : " + Message_Type.not_Find_Data.GetDescription();
-            listData = D6Repository.getD6Status(reportDate, version);
+            statusData = D6Repository.getD6RiskReviewStatus(reportDate, version);
 
-            if (listData.Any())
+            if (statusData.Any())
             {
                 result.RETURN_FLAG = true;
 
-                foreach (StatusInfo content in listData)
+                foreach (StatusInfo _status in statusData)
                 {
-                    listContent.Add(content.StatusData());
+                    status.Add(_status.StatusData());
                 }
-                result.Datas = Json(listContent);
+                result.Datas = Json(status);
             }
             return Json(result);
         }
@@ -3563,27 +3653,27 @@ namespace Transfer.Controllers
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public JsonResult GetD6Product(string[] data)
+        public JsonResult GetD6RiskReviewProduct(string[] data)
         {
             MSGReturnModel result = new MSGReturnModel();
-            List<string> listContent = new List<string>();
-            List<GroupProduct> listData = new List<GroupProduct>();
+            List<string> product = new List<string>();
+            List<GroupProduct> productData = new List<GroupProduct>();
             DateTime reportDate = DateTime.Parse(data[0]);
             int version = Convert.ToInt32(data[1]);
 
             result.RETURN_FLAG = false;
             result.DESCRIPTION = "產品 : " + Message_Type.not_Find_Data.GetDescription();
-            listData = D6Repository.getD6Product(reportDate, version);
+            productData = D6Repository.getD6RiskReviewProduct(reportDate, version);
 
-            if (listData.Any())
+            if (productData.Any())
             {
                 result.RETURN_FLAG = true;
 
-                foreach (GroupProduct content in listData)
+                foreach (GroupProduct _product in productData)
                 {
-                    listContent.Add(content.ProductData());
+                    product.Add(_product.ProductData());
                 }
-                result.Datas = Json(listContent);
+                result.Datas = Json(product);
             }
             return Json(result);
         }
@@ -3593,22 +3683,77 @@ namespace Transfer.Controllers
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public JsonResult GetD6Handle(string[] data)
+        public JsonResult GetD6RiskReviewHandle(string[] data)
         {
             MSGReturnModel result = new MSGReturnModel();
-            List<string> listContent = new List<string>();
+            List<BondRiskReviewResult> handle = new List<BondRiskReviewResult>();
             DateTime reportDate = DateTime.Parse(data[0]);
             int version = Convert.ToInt32(data[1]);
+            int status = Convert.ToInt32(data[2]);
 
             result.RETURN_FLAG = false;
             result.DESCRIPTION = "量化評估 : " + Message_Type.not_Find_Data.GetDescription();
-            listContent = D6Repository.getD6Handle(reportDate, version);
+            handle = D6Repository.getD6RiskReviewHandle(reportDate, version, status);
+
+            if (handle.Any())
+            {
+                result.RETURN_FLAG = true;
+                result.Datas = Json(handle);
+            }
+            return Json(result);
+        }
+
+        /// <summary>
+        /// Joe:查詢 Bond_RiskReview_Result :風控覆核專區(覆核)
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public JsonResult GetD6RiskReviewReview(string[] data)
+        {
+            MSGReturnModel result = new MSGReturnModel();
+            List<BondRiskReviewResult> listContent = new List<BondRiskReviewResult>();
+            DateTime reportDate = DateTime.Parse(data[0]);
+            int version = Convert.ToInt32(data[1]);
+            int status = Convert.ToInt32(data[2]);
+
+            result.RETURN_FLAG = false;
+            result.DESCRIPTION = "風控覆核 : " + Message_Type.not_Find_Data.GetDescription();
+            listContent = D6Repository.getD6RiskReviewReview(reportDate, version, status);
 
             if (listContent.Any())
             {
                 result.RETURN_FLAG = true;
                 result.Datas = Json(listContent);
             }
+            return Json(result);
+        }
+
+        /// <summary>
+        /// Joe:更新 Bond_Quantitative_Resource :風控狀態
+        /// Joe:新增 Version_Info :版本資訊
+        /// Joe:新增 Bond_RiskReview_Result :風控覆核專區
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public JsonResult SubmitD6Review(Dictionary<string, string> data)
+        {
+            MSGReturnModel result = new MSGReturnModel();
+            result = D6Repository.submitD6Review(data);
+            return Json(result);
+        }
+
+        /// <summary>
+        /// Joe:更新 Version_Info :版本內容
+        /// Joe:更新 Bond_RiskReview_Result :銷案
+        /// Joe:更新 Bond_Quantitative_Resource :風控狀態
+        /// Joe:更新 Bond_RiskReview_Result_File :狀態
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public JsonResult CloseD6Review(Dictionary<string, string> data)
+        {
+            MSGReturnModel result = new MSGReturnModel();
+            result = D6Repository.closeD6Review(data);
             return Json(result);
         }
     }
