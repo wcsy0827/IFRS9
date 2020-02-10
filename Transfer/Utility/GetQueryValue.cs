@@ -56,6 +56,8 @@ namespace Transfer.Utility
         public string Create_User { get; set; }
         public string First_Order_User { get; set; }
         public string Second_Order_User { get; set; }
+        public string First_Order_Confirm { get; set; }
+        public string Second_Order_Confirm { get; set; }
         public string D62Handle { get; set; }
         public string D62HandleOpinion { get; set; }
         public string D63_D64Handle { get; set; }
@@ -69,28 +71,28 @@ namespace Transfer.Utility
         public string C07AdvancedHandle { get; set; }
         public string C07AdvancedHandleOpinion { get; set; }
         public string D62ReviewOne { get; set; }
-        public string D62ReviewOpinionOne { get; set; }
+        public string D62ReviewOneOpinion { get; set; }
         public string D63_D64ReviewOne { get; set; }
-        public string D63_D64ReviewOpinionOne { get; set; }
+        public string D63_D64ReviewOneOpinion { get; set; }
         public string SummaryReviewOne { get; set; }
-        public string SummaryReviewOpinionOne { get; set; }
+        public string SummaryReviewOneOpinion { get; set; }
         public string WatchINDReviewOne { get; set; }
-        public string WatchINDReviewOpinionOne { get; set; }
+        public string WatchINDReviewOneOpinion { get; set; }
         public string WarningINDReviewOne { get; set; }
-        public string WarningINDReviewOpinionOne { get; set; }
+        public string WarningINDReviewOneOpinion { get; set; }
         public string C07AdvancedReviewOne { get; set; }
-        public string C07AdvancedReviewOpinionOne { get; set; }
+        public string C07AdvancedReviewOneOpinion { get; set; }
         public string D62ReviewTwo { get; set; }
-        public string D62ReviewOpinionTwo { get; set; }
+        public string D62ReviewTwoOpinion { get; set; }
         public string D63_D64ReviewTwo { get; set; }
-        public string D63_D64ReviewOpinionTwo { get; set; }
+        public string D63_D64ReviewTwoOpinion { get; set; }
         public string SummaryReviewTwo { get; set; }
-        public string SummaryReviewOpinionTwo { get; set; }
+        public string SummaryReviewTwoOpinion { get; set; }
         public string WatchINDReviewTwo { get; set; }
-        public string WatchINDReviewOpinionTwo { get; set; }
+        public string WatchINDReviewTwoOpinion { get; set; }
         public string WarningINDReviewTwo { get; set; }
-        public string WarningINDReviewOpinionTwo { get; set; }
+        public string WarningINDReviewTwoOpinion { get; set; }
         public string C07AdvancedReviewTwo { get; set; }
-        public string C07AdvancedReviewOpinionTwo { get; set; }
+        public string C07AdvancedReviewTwoOpinion { get; set; }
     }
 }

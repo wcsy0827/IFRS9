@@ -2223,7 +2223,7 @@
                     </Style>
                   </TextRun>
                   <TextRun>
-                    <Value>=Parameters!ReviewOpinionOne.Value</Value>
+                    <Value>=Parameters!ReviewOneOpinion.Value</Value>
                     <Style>
                       <FontFamily>標楷體</FontFamily>
                       <FontSize>12pt</FontSize>
@@ -2358,7 +2358,7 @@
                     </Style>
                   </TextRun>
                   <TextRun>
-                    <Value>=Parameters!ReviewOpinionTwo.Value</Value>
+                    <Value>=Parameters!ReviewTwoOpinion.Value</Value>
                     <Style>
                       <FontFamily>標楷體</FontFamily>
                       <FontSize>12pt</FontSize>
@@ -2885,7 +2885,7 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="ReviewOpinionOne">
+    <ReportParameter Name="ReviewOneOpinion">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
@@ -2897,7 +2897,7 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="ReviewOpinionTwo">
+    <ReportParameter Name="ReviewTwoOpinion">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
@@ -2962,7 +2962,7 @@
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>5</RowIndex>
-          <ParameterName>ReviewOpinionOne</ParameterName>
+          <ParameterName>ReviewOneOpinion</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
@@ -2972,7 +2972,7 @@
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
           <RowIndex>6</RowIndex>
-          <ParameterName>ReviewOpinionTwo</ParameterName>
+          <ParameterName>ReviewTwoOpinion</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>

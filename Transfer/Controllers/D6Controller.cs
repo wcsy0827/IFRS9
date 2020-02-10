@@ -464,6 +464,19 @@ namespace Transfer.Controllers
             return View();
         }
 
+        /// D6RiskReview(風控覆核專區(覆核))
+        /// </summary>
+        /// <returns></returns>
+        [UserAuth]
+        public ActionResult D6RiskReview()
+        {
+            //Joe:取得使用者ID/名稱
+            string id = System.Web.HttpContext.Current.User.Identity.Name;
+            ViewBag.userID = id;
+            ViewBag.userName = CommonFunction.getUserName(id);
+            return View();
+        }
+
         /// <summary>
         /// D65Assesment(質化評估需求資訊檔)
         /// </summary>

@@ -3408,21 +3408,21 @@ AND Version = @Version ; ";
                                 .ThenByDescending(y => y.Send_to_Auditor == "Y")
                                 .ThenByDescending(y => y.Assessment_Result_Version).FirstOrDefault()).ToList();
                     result.ForEach(x =>
-                    {
-                        var list = results.Where(y => y.Reference_Nbr == x.Reference_Nbr).ToList();
-                        var _status = getD63Status(list);
-                        var rejectFlag =
-                          (_status == Evaluation_Status_Type.ReviewCompleted ||
-                           _status == Evaluation_Status_Type.Review) ? false :
-                           (list.Count >= 2 && list.Any(z => z.Auditor_Return == "Y"));
-                        list.ForEach(y =>
-                        {
-                            y.Status = y.Auditor_Return == "Y" ?
-                            Evaluation_Status_Type.Reject.GetDescription() :
-                            rejectFlag ? "複核被退回請重新提交" : _status.GetDescription();
-                            y.Result_Version_Confirm_Flag = getResultVersionConfirmFlag(_status);
-                        });
-                    });
+                      {
+                          var list = results.Where(y => y.Reference_Nbr == x.Reference_Nbr).ToList();
+                          var _status = getD63Status(list);
+                          var rejectFlag =
+                            (_status == Evaluation_Status_Type.ReviewCompleted ||
+                             _status == Evaluation_Status_Type.Review) ? false :
+                             (list.Count >= 2 && list.Any(z => z.Auditor_Return == "Y"));
+                          list.ForEach(y =>
+                          {
+                              y.Status = y.Auditor_Return == "Y" ?
+                              Evaluation_Status_Type.Reject.GetDescription() :
+                              rejectFlag ? "複核被退回請重新提交" : _status.GetDescription();
+                              y.Result_Version_Confirm_Flag = getResultVersionConfirmFlag(_status);
+                          });
+                      });
                     if ((indexFlag & Evaluation_Status_Type.NotAssess) == Evaluation_Status_Type.NotAssess)
                         result = result.Where(x => x.Status == Evaluation_Status_Type.NotAssess.GetDescription()).ToList();
                     if ((indexFlag & Evaluation_Status_Type.NotReview) == Evaluation_Status_Type.NotReview)
@@ -8158,30 +8158,30 @@ FROM TEMP ";
                         C07AdvancedHandleOpinion = x.C07AdvancedHandleOpinion,
                         First_Order_User = x.First_Order_User,
                         D62ReviewOne = x.D62ReviewOne,
-                        D62ReviewOpinionOne = x.D62ReviewOpinionOne,
+                        D62ReviewOneOpinion = x.D62ReviewOneOpinion,
                         D63_D64ReviewOne = x.D63_D64ReviewOne,
-                        D63_D64ReviewOpinionOne = x.D63_D64ReviewOpinionOne,
+                        D63_D64ReviewOneOpinion = x.D63_D64ReviewOneOpinion,
                         SummaryReviewOne = x.SummaryReviewOne,
-                        SummaryReviewOpinionOne = x.SummaryReviewOpinionOne,
+                        SummaryReviewOneOpinion = x.SummaryReviewOneOpinion,
                         WatchINDReviewOne = x.WatchINDReviewOne,
-                        WatchINDReviewOpinionOne = x.WatchINDReviewOpinionOne,
+                        WatchINDReviewOneOpinion = x.WatchINDReviewOneOpinion,
                         WarningINDReviewOne = x.WarningINDReviewOne,
-                        WarningINDReviewOpinionOne = x.WarningINDReviewOpinionOne,
+                        WarningINDReviewOneOpinion = x.WarningINDReviewOneOpinion,
                         C07AdvancedReviewOne = x.C07AdvancedReviewOne,
-                        C07AdvancedReviewOpinionOne = x.C07AdvancedReviewOpinionOne,
+                        C07AdvancedReviewOneOpinion = x.C07AdvancedReviewOneOpinion,
                         Second_Order_User = x.Second_Order_User,
                         D62ReviewTwo = x.D62ReviewTwo,
-                        D62ReviewOpinionTwo = x.D62ReviewOpinionTwo,
+                        D62ReviewTwoOpinion = x.D62ReviewTwoOpinion,
                         D63_D64ReviewTwo = x.D63_D64ReviewTwo,
-                        D63_D64ReviewOpinionTwo = x.D63_D64ReviewOpinionTwo,
+                        D63_D64ReviewTwoOpinion = x.D63_D64ReviewTwoOpinion,
                         SummaryReviewTwo = x.SummaryReviewTwo,
-                        SummaryReviewOpinionTwo = x.SummaryReviewOpinionTwo,
+                        SummaryReviewTwoOpinion = x.SummaryReviewTwoOpinion,
                         WatchINDReviewTwo = x.WatchINDReviewTwo,
-                        WatchINDReviewOpinionTwo = x.WatchINDReviewOpinionTwo,
+                        WatchINDReviewTwoOpinion = x.WatchINDReviewTwoOpinion,
                         WarningINDReviewTwo = x.WarningINDReviewTwo,
-                        WarningINDReviewOpinionTwo = x.WarningINDReviewOpinionTwo,
+                        WarningINDReviewTwoOpinion = x.WarningINDReviewTwoOpinion,
                         C07AdvancedReviewTwo = x.C07AdvancedReviewTwo,
-                        C07AdvancedReviewOpinionTwo = x.C07AdvancedReviewOpinionTwo
+                        C07AdvancedReviewTwoOpinion = x.C07AdvancedReviewTwoOpinion
                     })
                     .Distinct()
                     .OrderBy(x => x)
@@ -8292,6 +8292,8 @@ FROM TEMP ";
                     BondRiskReviewResult.Create_Time = _UserInfo._time;
                     BondRiskReviewResult.First_Order_User = data["First_Order_User"];
                     BondRiskReviewResult.Second_Order_User = data["Second_Order_User"];
+                    BondRiskReviewResult.First_Order_Confirm = data["First_Order_Confirm"];
+                    BondRiskReviewResult.Second_Order_Confirm = data["Second_Order_Confirm"];
                     BondRiskReviewResult.D62Handle = data["D62Handle"];
                     BondRiskReviewResult.D62HandleOpinion = data["D62HandleOpinion"];
                     BondRiskReviewResult.D63_D64Handle = data["D63、D64Handle"];
@@ -8334,7 +8336,7 @@ FROM TEMP ";
         /// <summary>
         /// Joe:更新 Version_Info :版本內容
         /// Joe:更新 Bond_RiskReview_Result :銷案
-        /// Joe:更新 Bond_RiskReview_Result_File :狀態
+        /// Joe:更新 Bond_RiskReview_Result_File :狀態/刪除檔案
         /// Joe:更新 Bond_Quantitative_Resource :風控狀態
         /// </summary>
         /// <param name="data"></param>
@@ -8380,11 +8382,13 @@ FROM TEMP ";
                     BondRiskReviewResult.Close_Date = _UserInfo._date;
                     BondRiskReviewResult.Close_Time = _UserInfo._time;
                     BondRiskReviewResult.First_Order_User = null;
-                    BondRiskReviewResult.First_Order_Update_Date = null;
-                    BondRiskReviewResult.First_Order_Update_Time = null;
+                    BondRiskReviewResult.First_Order_Confirm = null;
+                    BondRiskReviewResult.First_Order_Date = null;
+                    BondRiskReviewResult.First_Order_Time = null;
                     BondRiskReviewResult.Second_Order_User = null;
-                    BondRiskReviewResult.Second_Order_Update_Date = null;
-                    BondRiskReviewResult.Second_Order_Update_Time = null;
+                    BondRiskReviewResult.Second_Order_Confirm = null;
+                    BondRiskReviewResult.Second_Order_Date = null;
+                    BondRiskReviewResult.Second_Order_Time = null;
                     BondRiskReviewResult.D62Handle = null;
                     BondRiskReviewResult.D62HandleOpinion = null;
                     BondRiskReviewResult.D63_D64Handle = null;
@@ -8398,29 +8402,29 @@ FROM TEMP ";
                     BondRiskReviewResult.C07AdvancedHandle = null;
                     BondRiskReviewResult.C07AdvancedHandleOpinion = null;
                     BondRiskReviewResult.D62ReviewOne = null;
-                    BondRiskReviewResult.D62ReviewOpinionOne = null;
+                    BondRiskReviewResult.D62ReviewOneOpinion = null;
                     BondRiskReviewResult.D63_D64ReviewOne = null;
-                    BondRiskReviewResult.D63_D64ReviewOpinionOne = null;
+                    BondRiskReviewResult.D63_D64ReviewOneOpinion = null;
                     BondRiskReviewResult.SummaryReviewOne = null;
-                    BondRiskReviewResult.SummaryReviewOpinionOne = null;
+                    BondRiskReviewResult.SummaryReviewOneOpinion = null;
                     BondRiskReviewResult.WatchINDReviewOne = null;
-                    BondRiskReviewResult.WatchINDReviewOpinionOne = null;
+                    BondRiskReviewResult.WatchINDReviewOneOpinion = null;
                     BondRiskReviewResult.WarningINDReviewOne = null;
-                    BondRiskReviewResult.WarningINDReviewOpinionOne = null;
+                    BondRiskReviewResult.WarningINDReviewOneOpinion = null;
                     BondRiskReviewResult.C07AdvancedReviewOne = null;
-                    BondRiskReviewResult.C07AdvancedReviewOpinionOne = null;
+                    BondRiskReviewResult.C07AdvancedReviewOneOpinion = null;
                     BondRiskReviewResult.D62ReviewTwo = null;
-                    BondRiskReviewResult.D62ReviewOpinionTwo = null;
+                    BondRiskReviewResult.D62ReviewTwoOpinion = null;
                     BondRiskReviewResult.D63_D64ReviewTwo = null;
-                    BondRiskReviewResult.D63_D64ReviewOpinionTwo = null;
+                    BondRiskReviewResult.D63_D64ReviewTwoOpinion = null;
                     BondRiskReviewResult.SummaryReviewTwo = null;
-                    BondRiskReviewResult.SummaryReviewOpinionTwo = null;
+                    BondRiskReviewResult.SummaryReviewTwoOpinion = null;
                     BondRiskReviewResult.WatchINDReviewTwo = null;
-                    BondRiskReviewResult.WatchINDReviewOpinionTwo = null;
+                    BondRiskReviewResult.WatchINDReviewTwoOpinion = null;
                     BondRiskReviewResult.WarningINDReviewTwo = null;
-                    BondRiskReviewResult.WarningINDReviewOpinionTwo = null;
+                    BondRiskReviewResult.WarningINDReviewTwoOpinion = null;
                     BondRiskReviewResult.C07AdvancedReviewTwo = null;
-                    BondRiskReviewResult.C07AdvancedReviewOpinionTwo = null;
+                    BondRiskReviewResult.C07AdvancedReviewTwoOpinion = null;
                 }
                 else
                 {
