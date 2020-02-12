@@ -37,6 +37,9 @@
                         <td style="padding-top:10px;">
                             <input type="button" class="btn btn-primary" value="查詢" id="btnD6RiskReviewHandleSearch" style="margin-right:10px;" />
                         </td>
+                        <td style="padding-top:10px;">
+                            <i class="fa fa-exclamation-circle title" id="iMessage" style="font-size:15px;" alt="無資料">表單狀態:</i>
+                        </td>
                     </tr>
                 </table>
             </form>
@@ -152,10 +155,12 @@
             $("#product option").remove();
             $("#content option").remove();
             $('#formDiv').children().remove();
+            $("#iMessage").attr("alt", "無資料");
             customerUtility.getData("version", $('#datepicker').val(), url.version, null, "0");
         }
         var contentFun = function () {
             $('#formDiv').children().remove();
+            $("#iMessage").attr("alt", "無資料");
             customerUtility.getData("content", [$('#datepicker').val(), $('#version').find(':selected').val()], url.content, null, $('#version').find(':selected').val());
             customerUtility.getData("status", [$('#datepicker').val(), $('#version').find(':selected').val()], url.status, selectFun, $('#version').find(':selected').val());
             customerUtility.getData("product", [$('#datepicker').val(), $('#version').find(':selected').val()], url.product, selectFun, $('#version').find(':selected').val());
@@ -253,7 +258,6 @@
         }
 
         //Joe:建立簽核資料
-        var formLevel = "";
         var userLevel = "";
         var date = new Date();
         var signOffData =
@@ -286,9 +290,11 @@
 
         //Joe:查詢表單(量化評估需求資訊檔:查詢/修改,風控覆核專區(經辦):查詢/修改)
         function search() {
+            var message = "無資料";
             $('#formDiv').children().remove();
-            if ($('#datepicker').val() == "" || $('#version').find(':selected').val() == "" || $('#status').find(':selected').val() == "") {
-                alert("請篩選查詢條件!");
+            if ($('#status').find(':selected').text() == "" ||
+                $('#version').find(':selected').text() == "") {
+                alert("請重新篩選查詢條件!");
                 return;
             }
             url.search = url.handle;
@@ -299,7 +305,12 @@
                 $.ajax({
                     type: "POST",
                     data: JSON.stringify({
-                        data: [$('#datepicker').val(), $('#version').find(':selected').val(), $('#status').find(':selected').val()]
+                        data:
+                            [
+                                $('#datepicker').val(),
+                                $('#version').find(':selected').val(),
+                                $('#status').find(':selected').val()
+                            ]
                     }),
                     dataType: "json",
                     url: url.search,
@@ -308,8 +319,8 @@
                     .done(function (result) {
                         if (result.RETURN_FLAG) {
                             //Joe:取得簽核資料
-                            signOffData["Reference_Nbr"] = result.Datas.Data[0].Reference_Nbr;
                             signOffData["Create_User"] = result.Datas.Data[0].Create_User;
+                            signOffData["Reference_Nbr"] = result.Datas.Data[0].Reference_Nbr;
                             signOffData["First_Order_User"] = result.Datas.Data[0].First_Order_User;
                             signOffData["Second_Order_User"] = result.Datas.Data[0].Second_Order_User;
                             signOffData["First_Order_Confirm"] = result.Datas.Data[0].First_Order_Confirm;
@@ -324,39 +335,40 @@
                                 signOffData[Object.keys(reportData)[i]] = result.Datas.Data[0][getDataValue];
                             }
                             //Joe:建立表單
-                            if (signOffData["Create_User"] != null && signOffData["Create_User"] != '@ViewBag.userID') {
-                                alert("此表單無編輯權限!");
+                            if (signOffData["Create_User"] != null &&
+                                signOffData["Create_User"] != '@ViewBag.userID') {
+                                alert("您在此表單無編輯權限!");
                                 return;
                             }
                             else if (signOffData["Create_User"] == '@ViewBag.userID') {
-                                formLevel = "(表單建立者)";
-                                alert("您為表單建立人員!");
+                                alert("您在此表單為建立人員!");
                             }
                             else {
                                 signOffData["Create_User"] = '@ViewBag.userID';
                             }
                             if (signOffData["First_Order_User"] != null) {
                                 if (signOffData["First_Order_Confirm"] == null) {
-                                    alert("一階覆核人員 " + signOffData["First_Order_User"].split(' ')[1] + " 未確認!");
+                                    message = "\n" + "一階覆核人員 : " + signOffData["First_Order_User"].split(' ')[1].replace("(", "").replace(")", "") + "(未確認)";
                                 }
                                 else if (signOffData["First_Order_Confirm"] == "Y") {
-                                    alert("一階覆核人員 " + signOffData["First_Order_User"].split(' ')[1] + " 已確認!");
+                                    message += "\n" + "一階覆核人員 : " + signOffData["First_Order_User"].split(' ')[1].replace("(", "").replace(")", "") + "(已覆核)";
                                 }
                                 else if (signOffData["First_Order_Confirm"] == "N") {
-                                    alert("一階覆核人員 " + signOffData["First_Order_User"].split(' ')[1] + " 已退回!");
+                                    message += "\n" + "一階覆核人員 : " + signOffData["First_Order_User"].split(' ')[1].replace("(", "").replace(")", "") + "(已退回)";
                                 }
                             }
                             if (signOffData["Second_Order_User"] != null) {
                                 if (signOffData["Second_Order_Confirm"] == null) {
-                                    alert("二階覆核人員 " + signOffData["Second_Order_User"].split(' ')[1] + " 未確認!");
+                                    message += "\n" + "二階覆核人員 : " + signOffData["Second_Order_User"].split(' ')[1].replace("(", "").replace(")", "") + "(未確認)";
                                 }
                                 else if (signOffData["Second_Order_Confirm"] == "Y") {
-                                    alert("二階覆核人員 " + signOffData["Second_Order_User"].split(' ')[1] + " 已確認!");
+                                    message += "\n" + "二階覆核人員 : " + signOffData["Second_Order_User"].split(' ')[1].replace("(", "").replace(")", "") + "(已覆核)";
                                 }
                                 else if (signOffData["Second_Order_Confirm"] == "N") {
-                                    alert("二階覆核人員 " + signOffData["Second_Order_User"].split(' ')[1] + " 已退回!");
+                                    message += "\n" + "二階覆核人員 : " + signOffData["Second_Order_User"].split(' ')[1].replace("(", "").replace(")", "") + "(已退回)";
                                 }
                             }
+                            $("#iMessage").attr("alt", message);
                             userLevel = "Handle";
                             createForm();
                         }
@@ -414,15 +426,8 @@
         }
 
         //Joe:開啟附件
-        var _annexColNames = ["刪除", "附件名稱"];
-        var _annexColModel = [
-            {//刪除
-                name: "Delete", index: "Delete", width: 40, sortable: false, align: "center", formatter: delFile
-            },
-            {//附件名稱
-                name: "File_Name", index: "File_Name", width: 440, sortable: false, align: "center", formatter: getFile
-            }
-        ];
+        var _annexColNames = null;
+        var _annexColModel = null;
         function delFile(cellvalue, options, rdata) {
             var str = '';
             str += '<div class="btn actionDeleIcon2" title="刪除" style="padding-right:4px;padding-left:4px;padding-bottom:0px;padding-top:0px;" id="' + options.rowId + '">';
@@ -437,6 +442,15 @@
             $('#annexFolder').val('');
             $('#annexList').children().remove();
             $('#annexFile').next().find('input').val('');
+            _annexColNames = ["刪除", "附件名稱"];
+            _annexColModel = [
+                {//刪除
+                    name: "Delete", index: "Delete", width: 40, sortable: false, align: "center", formatter: delFile
+                },
+                {//附件名稱
+                    name: "File_Name", index: "File_Name", width: 440, sortable: false, align: "center", formatter: getFile
+                }
+            ];
             if ($('#status').find(':selected').val() != "0") {
                 $('.fileUpLoad').hide();
                 _title = annexName + " : 檢視附件";
@@ -583,7 +597,7 @@
 
         //Joe:刪除簽核
         function signOffDelete() {
-            if (!confirm("確定刪除?")) {
+            if (!confirm("確定把簽核刪除?")) {
                 return false;
             }
             $('.textareaEdit').show();
@@ -715,7 +729,7 @@
             $('#formTable').jqGrid({
                 datatype: "local",
                 shrinkToFit: false,
-                caption: "風控覆核專區(經辦) : " + signOffData.Reference_Nbr + formLevel,
+                caption: "風控覆核專區(經辦) : " + signOffData.Reference_Nbr,
                 width: jqgridCustom.getwidth(),
                 height: 200,
                 data: [{}, {}, {}, {}, {}, {}, {}],
@@ -794,7 +808,8 @@
                     if ($('#status').find(':selected').val() != "0") {
                         $('#btn_Submit').prop('disabled', true);
                         $('#btn_Close').prop('disabled', false);
-                    } else {
+                    }
+                    else {
                         $('#btn_Submit').prop('disabled', false);
                         $('#btn_Close').prop('disabled', true);
                     }
@@ -1023,23 +1038,25 @@
                     $('#opinionTable > tbody > tr:gt(0) ').each(function () {
                         $(this).find('td').find('div.actionDeleIcon2').each(function () {
                             $(this).on('click', function () {
-                                if ('@ViewBag.userID' == $(this).attr('id') && $('#status').find(':selected').val() == "0") {
+                                if ('@ViewBag.userID' == $(this).attr('id') &&
+                                    $('#status').find(':selected').val() == "0") {
                                     signOffDelete();
                                 }
                                 else {
-                                    alert("您無此權限!");
+                                    alert("您無刪除權限!");
                                 }
                             });
                         });
                         $(this).find('td').find('div.getText').each(function () {
                             $(this).on('click', function () {
-                                if ('@ViewBag.userID' == $(this).attr('id') && $('#status').find(':selected').val() == "0") {
+                                if ('@ViewBag.userID' == $(this).attr('id') &&
+                                    $('#status').find(':selected').val() == "0") {
                                     $('.textareaEdit').show();
                                     $('#signOffSave').attr('value', '修改');
                                     $('#signOffTextArea').val($(this).text());
                                 }
                                 else {
-                                    alert("您無此權限!");
+                                    alert("您無修改權限!");
                                 }
                             });
                         });

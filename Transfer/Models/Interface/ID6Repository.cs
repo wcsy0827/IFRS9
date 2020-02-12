@@ -455,9 +455,9 @@ namespace Transfer.Models.Interface
         List<Tuple<string, string>> getUserAccount();
 
         /// <summary>
-        /// Joe:更新 Bond_Quantitative_Resource :風控狀態
         /// Joe:新增 Version_Info :版本資訊
-        /// Joe:新增 Bond_RiskReview_Result :風控覆核專區
+        /// Joe:更新 Bond_Quantitative_Resource :風控狀態
+        /// Joe:新增 Bond_RiskReview_Result :風控覆核專區(覆核/呈送覆核)
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
@@ -465,12 +465,21 @@ namespace Transfer.Models.Interface
 
         /// <summary>
         /// Joe:更新 Version_Info :版本內容
-        /// Joe:更新 Bond_RiskReview_Result :銷案
         /// Joe:更新 Bond_Quantitative_Resource :風控狀態
-        /// Joe:更新 Bond_RiskReview_Result_File :狀態
+        /// Joe:更新 Bond_RiskReview_Result_File :狀態(刪除檔案)
+        /// Joe:更新 Bond_RiskReview_Result :風控覆核專區(覆核/銷案)
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
         MSGReturnModel closeD6Review(Dictionary<string, string> data);
+
+        /// <summary>
+        /// Joe:更新 Bond_RiskReview_Result :簽核意見/狀態
+        /// Joe:更新 Bond_Quantitative_Resource :風控狀態
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="YorN"></param>
+        /// <returns></returns>
+        MSGReturnModel confirmD6Review(Dictionary<string, string> data, string YorN);
     }
 }

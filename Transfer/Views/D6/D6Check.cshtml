@@ -103,10 +103,12 @@
         })
 
         //查詢量化評估需求資訊檔
-        function search() {
+        function search()
+        {
             clearJqgrid("jqgridDiv");
             clearJqgrid("jqgridDiv2");
-            if ($('#myForm').valid()) {
+            if($('#myForm').valid())
+            {
                 $.ajax({
                     type: "POST",
                     data: JSON.stringify({
@@ -117,24 +119,25 @@
                     url: url.search,
                     contentType: 'application/json',
                 })
-                    .done(function (result) {
-                        if (result.RETURN_FLAG)
-                            createJqgrid("jqgridDiv", "list1", "pager1", result.Datas.Data);
-                        else
-                            customerUtility.alert(result.DESCRIPTION, 'e');
-                    })
+                .done(function(result){
+                    if(result.RETURN_FLAG)
+                        createJqgrid("jqgridDiv", "list1", "pager1", result.Datas.Data);
+                    else
+                        customerUtility.alert(result.DESCRIPTION, 'e');
+                })
             }
         }
 
         //clearJqgrid(清除JqGrid)
         function clearJqgrid(jqgridDivId) {
-            $('#' + jqgridDivId).children().remove();
+            $('#'+jqgridDivId).children().remove();
         }
 
         //Audit formate button
         function ActionFormatter(cellvalue, options, rdata) {
             let str = '';
-            if (rdata.Status == '@Ref.Stage_Type.completed.GetDescription()') {
+            if (rdata.Status == '@Ref.Stage_Type.completed.GetDescription()')
+            {
                 str += '<div class="btn-group">';
                 str += '<a title="檢視" class="btn actionViewIcon" style="padding-right:4px;padding-left:4px;padding-bottom:0px;padding-top:0px;" href="#" id="D6Check' + options.gid + 'Action' + options.rowId + '" return:false;="">';
                 str += '<i class="fa fa-search fa-lg"></i></a>';
@@ -147,34 +150,36 @@
         //listId(Jqgrid產生table的ID)
         //pagerId(下方產生筆數的ID)
         function createJqgrid(jqgridDivId, listId, pagerId, data) {
-            $('#' + jqgridDivId).append('<table id="' + listId + '"></table>');
+            $('#'+jqgridDivId).append('<table id="' + listId + '"></table>');
             $('#' + jqgridDivId).append('<div id="' + pagerId + '"></div>');
             let colNameArray = [];
             let colModelArray = [];
             let title = '';
             let height = 0;
             let _rowNum = 0;
-            if (listId == 'list1') {
+            if (listId == 'list1')
+            {
                 title = '減損作業狀態';
                 height = 200;
                 _rowNum = 7;
                 colNameArray = ["作業細項", "狀態", "詳細內容資料", "詳細內容查看"];
                 colModelArray = [
-                    { name: "Job_Details", index: "Job_Details", width: 150, sortable: false },
-                    { name: "Status", index: "Status", width: 100, sortable: false },
-                    { name: "Details", index: "Details", width: 80, sortable: false, hidden: true },
-                    { name: "Action", index: "Action", width: 200, sortable: false, formatter: ActionFormatter },
+                   { name: "Job_Details", index: "Job_Details", width: 150, sortable: false },
+                   { name: "Status", index: "Status", width: 100, sortable: false },
+                   { name: "Details", index: "Details", width: 80, sortable: false, hidden: true },
+                   { name: "Action", index: "Action", width: 200, sortable: false, formatter: ActionFormatter },
                 ];
             }
-            if (listId == 'list2') {
+            if (listId == 'list2')
+            {
                 title = '詳細資料';
                 height = 80;
                 _rowNum = 5;
                 colNameArray = ["作業細項", "狀態", "詳細內容資料"];
                 colModelArray = [
-                    { name: "Job_Details", index: "Job_Details", width: 150, sortable: false },
-                    { name: "Status", index: "Status", width: 100, sortable: false },
-                    { name: "Details", index: "Details", width: 750, sortable: false },
+                   { name: "Job_Details", index: "Job_Details", width: 150, sortable: false },
+                   { name: "Status", index: "Status", width: 100, sortable: false },
+                   { name: "Details", index: "Details", width: 750, sortable: false},
                 ];
             }
             $("#" + listId).jqGrid({
@@ -206,7 +211,8 @@
                 },
                 loadComplete: function () {
                     //jqgridCustom.updatePagerIcons($(this));
-                    if (listId == 'list1') {
+                    if (listId == 'list1')
+                    {
                         $('#' + listId + ' > tbody > tr:gt(0) > td[aria-describedby$=' + listId + '_Action]').each(function () {
                             //設定Action功能
                             let tr = $(this).parents('tr:first');
